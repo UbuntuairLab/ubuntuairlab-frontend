@@ -116,3 +116,8 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+
+# Distribution artifacts
+dist/
+*.zip
+dependency-reduced-pom.xml
