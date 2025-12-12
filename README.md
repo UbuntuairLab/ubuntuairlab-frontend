@@ -1,70 +1,70 @@
-# UbuntuAirLab - Airport Ground Equipment Management System
+# UbuntuAirLab - Système de Gestion des Équipements au Sol Aéroportuaires
 
 [![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://adoptium.net/)
 [![JavaFX](https://img.shields.io/badge/JavaFX-21.0.1-blue.svg)](https://openjfx.io/)
 [![Maven](https://img.shields.io/badge/Maven-3.6+-red.svg)](https://maven.apache.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A comprehensive JavaFX desktop application for managing airport ground operations, including real-time flight tracking, intelligent parking management, ML-powered predictions, and automated alerts.
+Application de bureau JavaFX complète pour la gestion des opérations au sol aéroportuaires, incluant le suivi des vols en temps réel, la gestion intelligente du stationnement, les prédictions basées sur l'IA et les alertes automatisées.
 
-## 🚀 Features
+## 🚀 Fonctionnalités
 
-- **Real-Time Flight Tracking**: Integration with OpenSky Network for live aircraft positions
-- **Intelligent Parking Management**: 18 parking spots (N1-N2, P1-P5, S1-S10B) with automated assignment
-- **ML Predictions**: Delay forecasting, congestion analysis, and duration predictions
-- **Smart Alerts**: Real-time notifications for critical events
-- **Planning & Scheduling**: Advanced tools for flight and resource management
-- **3D Visualization**: Interactive airport view with real-time updates
-- **API Integration**: 36 endpoints fully integrated with UbuntuAirLab API
-- **Batch Processing**: Mass prediction and data synchronization capabilities
+- **Suivi des Vols en Temps Réel**: Intégration avec OpenSky Network pour les positions d'avions en direct
+- **Gestion Intelligente du Stationnement**: 18 postes (N1-N2, P1-P5, S1-S10B) avec assignation automatique
+- **Prédictions ML**: Prévision des retards, analyse de congestion et estimation de la durée des vols
+- **Alertes Intelligentes**: Notifications en temps réel pour les événements critiques
+- **Planification**: Outils avancés pour la gestion des vols et des ressources
+- **Visualisation 3D**: Vue interactive de l'aéroport avec mises à jour en temps réel
+- **Intégration API**: 36 endpoints entièrement intégrés avec l'API UbuntuAirLab
+- **Traitement par Lots**: Prédictions massives et synchronisation automatique des données
 
-## 📋 Prerequisites
+## 📋 Prérequis
 
-- **Java Development Kit (JDK)**: 17 or higher
-  - Download: [Eclipse Temurin (Adoptium)](https://adoptium.net/)
-- **Apache Maven**: 3.6 or higher
-  - Installation: [Maven Installation Guide](https://maven.apache.org/install.html)
-- **Internet Connection**: Required for API access and real-time data
+- **Java Development Kit (JDK)**: 17 ou supérieur
+  - Téléchargement: [Eclipse Temurin (Adoptium)](https://adoptium.net/)
+- **Apache Maven**: 3.6 ou supérieur
+  - Installation: [Guide d'installation Maven](https://maven.apache.org/install.html)
+- **Connexion Internet**: Requise pour l'accès API et les données en temps réel
 
-## 🛠️ Installation & Setup
+## 🛠️ Installation et Configuration
 
-### 1. Clone the Repository
+### 1. Cloner le Dépôt
 
 ```bash
 git clone https://github.com/UbuntuairLab/ubuntuairlab-frontend.git
 cd ubuntuairlab-frontend
 ```
 
-### 2. Build the Project
+### 2. Compiler le Projet
 
 ```bash
 mvn clean install
 ```
 
-### 3. Run the Application
+### 3. Lancer l'Application
 
 ```bash
 mvn javafx:run
 ```
 
-## 📦 Building Executable
+## 📦 Créer un Exécutable
 
-To create a portable executable JAR:
+Pour créer un JAR exécutable portable :
 
 ```bash
-# Clean and package
+# Nettoyer et compiler
 mvn clean package -DskipTests
 
-# JAR will be created at: target/ubuntu-air-lab-3.0.0.jar
+# Le JAR sera créé dans : target/ubuntu-air-lab-3.0.0.jar
 ```
 
-### Running the JAR
+### Exécuter le JAR
 
 ```bash
 java -Xmx1024m -Dfile.encoding=UTF-8 -jar target/ubuntu-air-lab-3.0.0.jar
 ```
 
-## 🏗️ Project Structure
+## 🏗️ Structure du Projet
 
 ```
 ubuntuairlab-frontend/
@@ -72,44 +72,44 @@ ubuntuairlab-frontend/
 │   └── main/
 │       ├── java/
 │       │   └── com/aige/apronsmart/
-│       │       ├── AigApronSmartApplication.java    # Main entry point
-│       │       ├── controllers/                      # UI Controllers
+│       │       ├── AigApronSmartApplication.java    # Point d'entrée principal
+│       │       ├── controllers/                      # Contrôleurs UI
 │       │       │   ├── LoginController.java
 │       │       │   ├── DashboardController.java
 │       │       │   ├── RegisterController.java
-│       │       │   └── modules/                      # Module controllers
+│       │       │   └── modules/                      # Contrôleurs de modules
 │       │       │       ├── AlertsController.java
 │       │       │       ├── HistoryController.java
 │       │       │       ├── NotificationsController.java
 │       │       │       ├── PlanningController.java
-│       │       │       ├── PostesController.java     # Parking management
+│       │       │       ├── PostesController.java     # Gestion du stationnement
 │       │       │       ├── PredictionsController.java
-│       │       │       ├── RadarController.java      # Real-time tracking
+│       │       │       ├── RadarController.java      # Suivi temps réel
 │       │       │       └── Visualization3dController.java
-│       │       ├── models/                           # Data models
+│       │       ├── models/                           # Modèles de données
 │       │       │   ├── Alert.java
 │       │       │   ├── Flight.java
 │       │       │   ├── ParkingAllocation.java
 │       │       │   ├── ParkingSpot.java
 │       │       │   ├── User.java
 │       │       │   └── ...
-│       │       ├── services/                         # Business logic
-│       │       │   ├── BaseApiService.java           # Base HTTP client
+│       │       ├── services/                         # Logique métier
+│       │       │   ├── BaseApiService.java           # Client HTTP de base
 │       │       │   ├── AuthService.java
 │       │       │   ├── FlightService.java
 │       │       │   ├── ParkingService.java
 │       │       │   ├── PredictionService.java
 │       │       │   ├── AlertService.java
-│       │       │   ├── OpenSkyService.java           # Flight tracking
+│       │       │   ├── OpenSkyService.java           # Suivi des vols
 │       │       │   └── ...
-│       │       └── utils/                            # Utilities
+│       │       └── utils/                            # Utilitaires
 │       │           ├── Constants.java
 │       │           ├── DateUtils.java
 │       │           └── DialogUtils.java
 │       └── resources/
 │           ├── application.properties                # Configuration
-│           ├── logback.xml                          # Logging config
-│           ├── fxml/                                # UI layouts
+│           ├── logback.xml                          # Configuration logs
+│           ├── fxml/                                # Layouts UI
 │           │   ├── login.fxml
 │           │   ├── dashboard.fxml
 │           │   ├── register.fxml
@@ -117,24 +117,24 @@ ubuntuairlab-frontend/
 │           ├── css/
 │           │   └── main.css                         # Styles
 │           ├── html/
-│           │   └── visualization3d.html             # 3D view
-│           └── images/                              # Icons & images
-├── pom.xml                                          # Maven configuration
+│           │   └── visualization3d.html             # Vue 3D
+│           └── images/                              # Icônes & images
+├── pom.xml                                          # Configuration Maven
 └── README.md
 ```
 
 ## 🔧 Configuration
 
-### API Configuration
+### Configuration de l'API
 
-Edit `src/main/resources/application.properties`:
+Éditer `src/main/resources/application.properties` :
 
 ```properties
-# API Configuration
+# Configuration API
 api.base.url=https://air-lab.bestwebapp.tech/api/v1
 api.timeout=30000
 
-# Logging
+# Logs
 logging.level=INFO
 
 # Application
@@ -142,149 +142,149 @@ app.name=UbuntuAirLab
 app.version=3.0.0
 ```
 
-### Default Credentials
+### Identifiants par Défaut
 
 ```
-Username: admin
-Password: admin123
+Nom d'utilisateur : admin
+Mot de passe : admin123
 ```
 
-## 🎯 Core Components
+## 🎯 Composants Principaux
 
-### 1. Authentication System (`AuthService`)
+### 1. Système d'Authentification (`AuthService`)
 
-Handles user login, registration, and session management with JWT tokens.
+Gère la connexion, l'inscription et la gestion des sessions avec tokens JWT.
 
 ```java
 AuthService authService = AuthService.getInstance();
 AuthResponse response = authService.login("admin", "admin123");
 ```
 
-### 2. Flight Management (`FlightService`)
+### 2. Gestion des Vols (`FlightService`)
 
-Provides access to flight data with filtering and pagination.
+Fournit l'accès aux données de vol avec filtrage et pagination.
 
 ```java
 FlightService flightService = FlightService.getInstance();
 FlightsResponse flights = flightService.getFlights("active", "arrival", 50, 0, null);
 ```
 
-### 3. Parking Management (`ParkingService`)
+### 3. Gestion du Stationnement (`ParkingService`)
 
-Manages parking spot allocations with automatic code mapping (P2 → API spot "2").
+Gère les allocations de postes avec mapping automatique des codes (P2 → poste API "2").
 
 ```java
 ParkingService parkingService = ParkingService.getInstance();
 Map<String, Object> result = parkingService.assignParking("icao24", "P2");
 ```
 
-### 4. Real-Time Tracking (`OpenSkyService`)
+### 4. Suivi Temps Réel (`OpenSkyService`)
 
-Integrates with OpenSky Network for live aircraft positions.
+Intégration avec OpenSky Network pour les positions d'avions en direct.
 
 ```java
 OpenSkyService openSkyService = OpenSkyService.getInstance();
 List<Flight> liveFlights = openSkyService.getFlightsNearAirport(6.1656, 1.2544, 300.0);
 ```
 
-### 5. ML Predictions (`PredictionService`)
+### 5. Prédictions ML (`PredictionService`)
 
-Provides delay forecasts, congestion analysis, and flight duration estimates.
+Fournit les prévisions de retards, analyses de congestion et estimations de durée.
 
 ```java
 PredictionService predictionService = PredictionService.getInstance();
 Map<String, Object> delayPrediction = predictionService.predictDelay("icao24");
 ```
 
-### 6. Alert System (`AlertService`)
+### 6. Système d'Alertes (`AlertService`)
 
-Manages alerts with filtering, acknowledgment, and batch operations.
+Gère les alertes avec filtrage, accusé de réception et opérations par lots.
 
 ```java
 AlertService alertService = AlertService.getInstance();
 List<Alert> criticalAlerts = alertService.getAlerts("high", null, 100, 0);
 ```
 
-## 📡 API Integration
+## 📡 Intégration API
 
-The application integrates with 36 UbuntuAirLab API endpoints:
+L'application intègre 36 endpoints de l'API UbuntuAirLab :
 
-### Authentication (3 endpoints)
-- POST `/auth/login` - User login
-- POST `/auth/register` - User registration  
-- POST `/auth/logout` - User logout
+### Authentification (3 endpoints)
+- POST `/auth/login` - Connexion utilisateur
+- POST `/auth/register` - Inscription utilisateur
+- POST `/auth/logout` - Déconnexion utilisateur
 
-### Flights (9 endpoints)
-- GET `/flights` - List all flights with filters
-- GET `/flights/{icao24}` - Get flight details
-- POST `/flights` - Create new flight
-- PUT `/flights/{icao24}` - Update flight
-- DELETE `/flights/{icao24}` - Delete flight
-- GET `/flights/arrivals` - Get arrivals
-- GET `/flights/departures` - Get departures
-- GET `/flights/history` - Flight history
-- GET `/flights/future` - Scheduled flights
+### Vols (9 endpoints)
+- GET `/flights` - Liste de tous les vols avec filtres
+- GET `/flights/{icao24}` - Détails d'un vol
+- POST `/flights` - Créer un nouveau vol
+- PUT `/flights/{icao24}` - Mettre à jour un vol
+- DELETE `/flights/{icao24}` - Supprimer un vol
+- GET `/flights/arrivals` - Obtenir les arrivées
+- GET `/flights/departures` - Obtenir les départs
+- GET `/flights/history` - Historique des vols
+- GET `/flights/future` - Vols programmés
 
-### Parking (9 endpoints)
-- GET `/parking/spots` - List all parking spots
-- GET `/parking/spots/{id}` - Get spot details
-- POST `/parking/spots` - Create parking spot
-- PUT `/parking/spots/{id}` - Update spot
-- DELETE `/parking/spots/{id}` - Delete spot
-- GET `/parking/availability` - Check availability
-- GET `/parking/allocations` - Current allocations
-- POST `/parking/assign` - Assign spot to flight
-- POST `/parking/release` - Release parking spot
+### Stationnement (9 endpoints)
+- GET `/parking/spots` - Liste de tous les postes
+- GET `/parking/spots/{id}` - Détails d'un poste
+- POST `/parking/spots` - Créer un poste
+- PUT `/parking/spots/{id}` - Mettre à jour un poste
+- DELETE `/parking/spots/{id}` - Supprimer un poste
+- GET `/parking/availability` - Vérifier la disponibilité
+- GET `/parking/allocations` - Allocations actuelles
+- POST `/parking/assign` - Assigner un poste à un vol
+- POST `/parking/release` - Libérer un poste
 
-### Predictions (5 endpoints)
-- POST `/predictions/delay` - Predict flight delay
-- POST `/predictions/congestion` - Predict congestion
-- POST `/predictions/duration` - Predict duration
-- POST `/predictions/batch` - Batch predictions
-- GET `/predictions/models` - Available ML models
+### Prédictions (5 endpoints)
+- POST `/predictions/delay` - Prédire un retard
+- POST `/predictions/congestion` - Prédire la congestion
+- POST `/predictions/duration` - Prédire la durée
+- POST `/predictions/batch` - Prédictions par lots
+- GET `/predictions/models` - Modèles ML disponibles
 
-### Alerts (5 endpoints)
-- GET `/alerts` - List all alerts
-- GET `/alerts/{id}` - Get alert details
-- POST `/alerts/acknowledge/{id}` - Acknowledge alert
-- POST `/alerts/batch-acknowledge` - Batch acknowledge
-- GET `/alerts/statistics` - Alert statistics
+### Alertes (5 endpoints)
+- GET `/alerts` - Liste de toutes les alertes
+- GET `/alerts/{id}` - Détails d'une alerte
+- POST `/alerts/acknowledge/{id}` - Accuser réception
+- POST `/alerts/batch-acknowledge` - Accusé par lots
+- GET `/alerts/statistics` - Statistiques des alertes
 
-### Admin (3 endpoints)
-- GET `/admin/users` - List all users
-- GET `/admin/logs` - System logs
-- GET `/admin/metrics` - System metrics
+### Administration (3 endpoints)
+- GET `/admin/users` - Liste de tous les utilisateurs
+- GET `/admin/logs` - Journaux système
+- GET `/admin/metrics` - Métriques système
 
-### Sync & Dashboard (2 endpoints)
-- POST `/sync/flights` - Sync flight data
-- GET `/dashboard/stats` - Dashboard statistics
+### Synchronisation & Tableau de Bord (2 endpoints)
+- POST `/sync/flights` - Synchroniser les données de vol
+- GET `/dashboard/stats` - Statistiques du tableau de bord
 
-## 🔍 Key Features Explained
+## 🔍 Fonctionnalités Détaillées
 
-### Parking Spot Code Mapping
+### Mapping des Codes de Postes
 
-The system uses a bidirectional mapping between UI codes and API numeric codes:
+Le système utilise un mapping bidirectionnel entre les codes UI et les codes API numériques :
 
 ```java
-// UI Code → API Code
+// Code UI → Code API
 P1 → "1" (Cargo)
 P2 → "2" (Cargo)
 P4 → "4" (Cargo)
-S1 → "5" (Passenger)
+S1 → "5" (Passagers)
 
-// Example: Assigning flight to P2
+// Exemple : Assigner un vol au poste P2
 parkingService.assignParking("ABC123", "P2");
-// Internally converts P2 → "2" for API call
+// Convertit automatiquement P2 → "2" pour l'appel API
 ```
 
-### Real-Time Flight Updates
+### Mises à Jour en Temps Réel
 
-The radar module auto-refreshes every 10 seconds, merging:
-1. Local API flights
-2. OpenSky Network live positions
+Le module radar s'actualise automatiquement toutes les 10 secondes en fusionnant :
+1. Les vols de l'API locale
+2. Les positions en direct du réseau OpenSky
 
 ```java
-// In RadarController.java
+// Dans RadarController.java
 private void enableAutoRefresh() {
     Timeline timeline = new Timeline(
         new KeyFrame(Duration.seconds(10), e -> loadFlights())
@@ -294,99 +294,99 @@ private void enableAutoRefresh() {
 }
 ```
 
-### ML Prediction Workflow
+### Flux de Prédictions ML
 
 ```java
-// Single prediction
+// Prédiction unique
 Map<String, Object> result = predictionService.predictDelay("3c6444");
 
-// Batch predictions (up to 50 flights)
+// Prédictions par lots (jusqu'à 50 vols)
 List<String> icao24List = Arrays.asList("3c6444", "abc123", "def456");
 Map<String, Object> batchResult = predictionService.batchPredict(icao24List);
 ```
 
-## 🐛 Troubleshooting
+## 🐛 Dépannage
 
-### Issue: JavaFX runtime components missing
+### Problème : Composants JavaFX manquants
 
-**Solution**: Ensure Java 17+ is installed. JavaFX is bundled with the shaded JAR.
+**Solution** : Assurez-vous que Java 17+ est installé. JavaFX est inclus dans le JAR.
 
-### Issue: Connection refused / API errors
+### Problème : Erreurs de connexion / API
 
-**Solution**: 
-- Check internet connection
-- Verify API endpoint: `https://air-lab.bestwebapp.tech/api/v1`
-- Check firewall settings
+**Solution** :
+- Vérifier la connexion Internet
+- Vérifier l'endpoint API : `https://air-lab.bestwebapp.tech/api/v1`
+- Vérifier les paramètres du pare-feu
 
-### Issue: Compilation errors
+### Problème : Erreurs de compilation
 
-**Solution**: Clean and rebuild:
+**Solution** : Nettoyer et recompiler :
 ```bash
 mvn clean compile
 ```
 
-### Issue: Parking assignments don't update UI
+### Problème : Les assignations de stationnement ne mettent pas à jour l'UI
 
-**Solution**: This is a known API limitation. Ensure:
-1. Flight exists in the system (check Radar Live module)
-2. Use correct ICAO24 format (6-character hex)
-3. Spot code matches: P1, P2, P4, or S1
+**Solution** : C'est une limitation connue de l'API. Assurez-vous que :
+1. Le vol existe dans le système (vérifier dans le module Radar Live)
+2. Utilisez le format ICAO24 correct (6 caractères hexadécimaux)
+3. Le code du poste correspond : P1, P2, P4 ou S1
 
-## 🧪 Testing
+## 🧪 Tests
 
-Run tests:
+Exécuter les tests :
 ```bash
 mvn test
 ```
 
-Integration test (requires API access):
+Test d'intégration (nécessite l'accès à l'API) :
 ```bash
 mvn test -Dtest=ApiIntegrationTest
 ```
 
-## 📊 Performance
+## 📊 Performances
 
-- **JAR Size**: 58MB (includes all dependencies)
-- **Memory**: Recommended 1GB (-Xmx1024m)
-- **Startup Time**: ~3-5 seconds
-- **API Response**: Average 200-500ms
+- **Taille du JAR** : 58MB (toutes dépendances incluses)
+- **Mémoire** : 1GB recommandé (-Xmx1024m)
+- **Temps de démarrage** : ~3-5 secondes
+- **Réponse API** : Moyenne 200-500ms
 
-## 🤝 Contributing
+## 🤝 Contribution
 
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+1. Fork le dépôt
+2. Créer une branche : `git checkout -b feature/fonctionnalite-incroyable`
+3. Commit les changements : `git commit -m 'Ajout fonctionnalité incroyable'`
+4. Push vers la branche : `git push origin feature/fonctionnalite-incroyable`
+5. Ouvrir une Pull Request
 
-## 📝 License
+## 📝 Licence
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Ce projet est sous licence MIT - voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
-## 👥 Authors
+## 👥 Auteurs
 
-- **AIGE Team** - *Initial work* - [UbuntuairLab](https://github.com/UbuntuairLab)
+- **Équipe AIGE** - *Travail initial* - [UbuntuairLab](https://github.com/UbuntuairLab)
 
-## 🙏 Acknowledgments
+## 🙏 Remerciements
 
-- [OpenJFX](https://openjfx.io/) - JavaFX framework
-- [OkHttp](https://square.github.io/okhttp/) - HTTP client
-- [Jackson](https://github.com/FasterXML/jackson) - JSON processing
-- [OpenSky Network](https://opensky-network.org/) - Real-time flight data
-- [ControlsFX](https://controlsfx.github.io/) - Enhanced UI controls
+- [OpenJFX](https://openjfx.io/) - Framework JavaFX
+- [OkHttp](https://square.github.io/okhttp/) - Client HTTP
+- [Jackson](https://github.com/FasterXML/jackson) - Traitement JSON
+- [OpenSky Network](https://opensky-network.org/) - Données de vol en temps réel
+- [ControlsFX](https://controlsfx.github.io/) - Contrôles UI améliorés
 
 ## 📞 Support
 
-For issues and questions:
-- GitHub Issues: [Report a bug](https://github.com/UbuntuairLab/ubuntuairlab-frontend/issues)
-- Email: support@ubuntuairlab.com
+Pour les problèmes et questions :
+- GitHub Issues : [Signaler un bug](https://github.com/UbuntuairLab/ubuntuairlab-frontend/issues)
+- Email : support@ubuntuairlab.com
 
-## 🔗 Links
+## 🔗 Liens
 
-- [API Documentation](https://air-lab.bestwebapp.tech/docs)
-- [OpenSky Network API](https://openskynetwork.github.io/opensky-api/)
-- [JavaFX Documentation](https://openjfx.io/javadoc/21/)
+- [Documentation API](https://air-lab.bestwebapp.tech/docs)
+- [API OpenSky Network](https://openskynetwork.github.io/opensky-api/)
+- [Documentation JavaFX](https://openjfx.io/javadoc/21/)
 
 ---
 
-**Built with ❤️ by AIGE Team**
+**Développé avec ❤️ par l'Équipe AIGE**
