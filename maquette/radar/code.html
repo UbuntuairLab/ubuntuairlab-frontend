@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Module Radar Live</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1773cf",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top App Bar -->
+<div class="absolute top-0 z-20 w-full bg-gradient-to-b from-background-dark/80 via-background-dark/50 to-transparent pt-safe">
+<div class="flex items-center p-4 pb-2">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined text-white">arrow_back_ios_new</span>
+</div>
+<h1 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-white">Module Radar Live</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex h-12 max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg bg-transparent p-0 text-base font-bold leading-normal tracking-[0.015em] text-white min-w-0">
+<span class="material-symbols-outlined text-white">filter_list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Map Background -->
+<div class="absolute inset-0 h-full w-full">
+<div class="h-full w-full bg-cover bg-center" data-alt="Dark satellite view of an airport apron with runways" data-location="heathrow airport" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA22_nRtHOXq2ELXmC8aG3zB_5CdYj8VZOiAk-bkzJMjauw3YzFNIRUWo8YGaShFF6B5_qfHb12QWpM-yRYR8-NTjrmmfU4540tKDj54zJLNDQPcQLoc-Dn0uwb3dyo6MN_N-TTqpcZkVb5GlpqL3KPNphowl3zgkGgDshonmwBsZTIQgNsmwzWrXJTU9urb3tCBM7ub3TgDGC0hZyKC7ize2rQ7qW2gbD1baYhoitfDQISfjhxbJfMk20p2TUXt0unw8GE9XBOnApj');">
+</div>
+<!-- Map UI Controls -->
+<div class="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex flex-col items-end gap-3">
+<div class="flex flex-col gap-px overflow-hidden rounded-lg shadow-lg">
+<button class="flex size-10 items-center justify-center bg-background-dark/80 backdrop-blur-sm">
+<span class="material-symbols-outlined text-white">add</span>
+</button>
+<button class="flex size-10 items-center justify-center bg-background-dark/80 backdrop-blur-sm">
+<span class="material-symbols-outlined text-white">remove</span>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-lg bg-background-dark/80 shadow-lg backdrop-blur-sm">
+<span class="material-symbols-outlined text-white">my_location</span>
+</button>
+</div>
+<!-- Aircraft Icon Example -->
+<div class="absolute z-10" style="top: 45%; left: 55%; transform: rotate(45deg);">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">airplanemode_active</span>
+</div>
+<div class="absolute z-10" style="top: 60%; left: 30%; transform: rotate(-90deg);">
+<span class="material-symbols-outlined text-yellow-400 text-4xl" style="font-variation-settings: 'FILL' 1;">airplanemode_active</span>
+</div>
+<div class="absolute z-10" style="top: 30%; left: 20%; transform: rotate(180deg);">
+<span class="material-symbols-outlined text-green-400 text-4xl" style="font-variation-settings: 'FILL' 1;">airplanemode_active</span>
+</div>
+<!-- Flight Info Pop-up -->
+<div class="absolute top-1/2 left-1/2 z-20 w-56 -translate-x-1/2 -translate-y-28 rounded-xl bg-background-dark/80 p-3 text-white shadow-2xl backdrop-blur-md">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<p class="font-display text-lg font-bold">UA901</p>
+<p class="rounded-full bg-primary/20 px-2 py-0.5 text-xs font-medium text-primary">On Approach</p>
+</div>
+<div class="text-sm text-gray-300">
+<p>Boeing 777</p>
+<p>ETA: 14:32 (in 8m)</p>
+<p>Assigned: Spot G23</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Sheet -->
+<div class="absolute bottom-0 z-20 flex h-3/5 w-full flex-col">
+<!-- Handle -->
+<div class="flex h-5 w-full items-center justify-center">
+<div class="h-1 w-9 rounded-full bg-gray-600"></div>
+</div>
+<!-- Content -->
+<div class="flex flex-1 flex-col overflow-hidden rounded-t-xl bg-background-dark">
+<!-- Header -->
+<h2 class="font-display text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-3">Active Flights</h2>
+<!-- Flight List (Scrollable) -->
+<div class="flex-1 overflow-y-auto">
+<!-- List Item 1 -->
+<div class="flex items-center gap-4 px-4 py-2 min-h-[72px] justify-between">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gray-800 text-white">
+<span class="material-symbols-outlined">flight_land</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="font-display text-base font-medium leading-normal text-white">BA2490</p>
+<p class="font-display text-sm font-normal leading-normal text-gray-400">A320 - London</p>
+</div>
+</div>
+<div class="shrink-0"><p class="font-display text-base font-normal leading-normal text-white">Arriving 5m</p></div>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center gap-4 px-4 py-2 min-h-[72px] justify-between">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gray-800 text-white">
+<span class="material-symbols-outlined">flight_takeoff</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="font-display text-base font-medium leading-normal text-white">LH992</p>
+<p class="font-display text-sm font-normal leading-normal text-gray-400">A380 - Frankfurt</p>
+</div>
+</div>
+<div class="shrink-0"><p class="font-display text-base font-normal leading-normal text-white">Departing 12m</p></div>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center gap-4 px-4 py-2 min-h-[72px] justify-between">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gray-800 text-white">
+<span class="material-symbols-outlined">local_parking</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="font-display text-base font-medium leading-normal text-white">EK204</p>
+<p class="font-display text-sm font-normal leading-normal text-gray-400">B777 - Dubai</p>
+</div>
+</div>
+<div class="shrink-0"><p class="font-display text-base font-normal leading-normal text-white">Parked at F11</p></div>
+</div>
+<!-- List Item 4 -->
+<div class="flex items-center gap-4 px-4 py-2 min-h-[72px] justify-between">
+<div class="flex items-center gap-4">
+<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-gray-800 text-white">
+<span class="material-symbols-outlined">flight_land</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="font-display text-base font-medium leading-normal text-white">DL109</p>
+<p class="font-display text-sm font-normal leading-normal text-gray-400">A350 - Atlanta</p>
+</div>
+</div>
+<div class="shrink-0"><p class="font-display text-base font-normal leading-normal text-yellow-400">Delayed 20m</p></div>
+</div>
+</div>
+<!-- Playback Controls -->
+<div class="border-t border-gray-800 bg-background-dark px-4 pb-safe pt-3">
+<div class="flex items-center justify-between gap-4">
+<button class="flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-800 text-white">
+<span class="material-symbols-outlined">pause</span>
+</button>
+<button class="flex h-12 flex-[3] items-center justify-center gap-2 rounded-lg bg-primary text-white">
+<div class="relative flex h-2 w-2">
+<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+<span class="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+</div>
+<span>Live</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

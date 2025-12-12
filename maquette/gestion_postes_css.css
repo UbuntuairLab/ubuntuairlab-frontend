@@ -1,0 +1,229 @@
+/* Module Gestion Postes Stylesheet */
+
+.root {
+    -fx-background-color: #111921;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* App Bar */
+.app-bar {
+    -fx-background-color: rgba(17, 25, 33, 0.8);
+}
+
+.app-icon {
+    -fx-font-size: 28px;
+    -fx-text-fill: white;
+}
+
+.app-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icon-label {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+}
+
+/* Main Scroll */
+.main-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.main-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Stats Container */
+.stats-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.stats-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.stats-container {
+    -fx-background-color: transparent;
+}
+
+.stat-card {
+    -fx-background-color: #1C2936;
+    -fx-border-color: #344d65;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.stat-label {
+    -fx-text-fill: #93adc8;
+}
+
+.stat-value {
+    -fx-text-fill: white;
+}
+
+/* Filter Chips */
+.chip-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.chip-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.chip-container {
+    -fx-background-color: transparent;
+}
+
+.chip-button {
+    -fx-background-color: #243647;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-padding: 0 12 0 16;
+    -fx-min-height: 36px;
+    -fx-max-height: 36px;
+}
+
+.chip-button:hover {
+    -fx-background-color: #2d4559;
+}
+
+.chip-button.chip-selected {
+    -fx-background-color: rgba(23, 115, 207, 0.2);
+}
+
+.chip-label {
+    -fx-text-fill: white;
+}
+
+.chip-label-selected {
+    -fx-text-fill: #1773cf;
+}
+
+.chip-icon {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+}
+
+.chip-icon-selected {
+    -fx-text-fill: #1773cf;
+    -fx-font-size: 20px;
+}
+
+.chip-clear {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-padding: 0 12;
+    -fx-min-height: 36px;
+    -fx-max-height: 36px;
+}
+
+.chip-clear:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chip-clear-label {
+    -fx-text-fill: #1773cf;
+}
+
+/* Parking Grid */
+.parking-grid {
+    -fx-background-color: transparent;
+}
+
+.parking-spot {
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-width: 100px;
+    -fx-min-height: 100px;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 140px;
+}
+
+.parking-spot:hover {
+    -fx-opacity: 0.9;
+}
+
+.spot-free {
+    -fx-background-color: #22c55e;
+}
+
+.spot-occupied {
+    -fx-background-color: #ef4444;
+}
+
+.spot-reserved {
+    -fx-background-color: #f97316;
+}
+
+.spot-military {
+    -fx-background-color: #1773cf;
+}
+
+.spot-number {
+    -fx-text-fill: white;
+}
+
+.spot-status {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+/* Legend */
+.legend-container {
+    -fx-background-color: #1C2936;
+    -fx-border-color: #344d65;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.legend-title {
+    -fx-text-fill: white;
+}
+
+.legend-label {
+    -fx-text-fill: #93adc8;
+}
+
+.legend-color-free {
+    -fx-fill: #22c55e;
+    -fx-arc-width: 4;
+    -fx-arc-height: 4;
+}
+
+.legend-color-occupied {
+    -fx-fill: #ef4444;
+    -fx-arc-width: 4;
+    -fx-arc-height: 4;
+}
+
+.legend-color-reserved {
+    -fx-fill: #f97316;
+    -fx-arc-width: 4;
+    -fx-arc-height: 4;
+}
+
+.legend-color-military {
+    -fx-fill: #1773cf;
+    -fx-arc-width: 4;
+    -fx-arc-height: 4;
+}

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ModulePlanificationController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root"
+      spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Region minWidth="48" minHeight="48"/>
+        
+        <Label text="Module Planification" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="+" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Segmented View Selector -->
+    <HBox styleClass="view-selector-container">
+        <padding>
+            <Insets top="12" right="16" bottom="12" left="16"/>
+        </padding>
+        
+        <HBox styleClass="segmented-control" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="4" right="4" bottom="4" left="4"/>
+            </padding>
+            
+            <ToggleButton text="Day" styleClass="segment-button" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+                <toggleGroup>
+                    <ToggleGroup fx:id="viewGroup"/>
+                </toggleGroup>
+            </ToggleButton>
+            
+            <ToggleButton text="Week" styleClass="segment-button" 
+                         toggleGroup="$viewGroup" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+            </ToggleButton>
+            
+            <ToggleButton text="Month" styleClass="segment-button" 
+                         toggleGroup="$viewGroup" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+            </ToggleButton>
+            
+            <ToggleButton text="Resource" styleClass="segment-button" selected="true"
+                         toggleGroup="$viewGroup" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+            </ToggleButton>
+        </HBox>
+    </HBox>
+    
+    <!-- Calendar Picker -->
+    <HBox alignment="CENTER" styleClass="calendar-picker">
+        <padding>
+            <Insets top="8" right="16" bottom="16" left="16"/>
+        </padding>
+        
+        <Button styleClass="nav-button" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40">
+            <graphic>
+                <Label text="‹" styleClass="nav-icon"/>
+            </graphic>
+        </Button>
+        
+        <Label text="October 5, 2024" styleClass="date-label" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="16"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="nav-button" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40">
+            <graphic>
+                <Label text="›" styleClass="nav-icon"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Timeline/Resource View -->
+    <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="timeline-scroll">
+        <StackPane>
+            <VBox spacing="0" styleClass="timeline-container">
+                <padding>
+                    <Insets top="0" right="16" bottom="16" left="16"/>
+                </padding>
+                
+                <!-- Time Header -->
+                <HBox styleClass="time-header" prefHeight="40">
+                    <Region minWidth="80" maxWidth="80"/>
+                    <Label text="08:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label text="09:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label text="10:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label text="11:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label text="12:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label text="13:00" styleClass="time-label" HBox.hgrow="ALWAYS">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                </HBox>
+                
+                <!-- Stand A01 -->
+                <HBox styleClass="resource-lane" minHeight="80" prefHeight="80">
+                    <Label text="Stand A01" styleClass="resource-label" minWidth="80" maxWidth="80">
+                        <font>
+                            <Font name="Inter SemiBold" size="14"/>
+                        </font>
+                    </Label>
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <!-- Grid Lines -->
+                        <HBox styleClass="grid-lines">
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <!-- Flight Card -->
+                        <VBox styleClass="flight-card" alignment="CENTER_LEFT">
+                            <StackPane.margin>
+                                <Insets left="80" right="200"/>
+                            </StackPane.margin>
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="8"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="4">
+                                <Label text="AF123 - AFR" styleClass="flight-code">
+                                    <font>
+                                        <Font name="Inter Bold" size="12"/>
+                                    </font>
+                                </Label>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="✓" styleClass="status-icon-success"/>
+                            </HBox>
+                            <Label text="A320" styleClass="aircraft-type">
+                                <font>
+                                    <Font name="Inter" size="10"/>
+                                </font>
+                            </Label>
+                            <Label text="09:00 - 11:00" styleClass="flight-time">
+                                <font>
+                                    <Font name="Inter Medium" size="12"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                </HBox>
+                
+                <!-- Stand A02 -->
+                <HBox styleClass="resource-lane" minHeight="80" prefHeight="80">
+                    <Label text="Stand A02" styleClass="resource-label" minWidth="80" maxWidth="80">
+                        <font>
+                            <Font name="Inter SemiBold" size="14"/>
+                        </font>
+                    </Label>
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <!-- Grid Lines -->
+                        <HBox styleClass="grid-lines">
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <!-- Flight Cards -->
+                        <VBox styleClass="flight-card, flight-warning" alignment="CENTER_LEFT">
+                            <StackPane.margin>
+                                <Insets left="0" right="300"/>
+                            </StackPane.margin>
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="12"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="4">
+                                <Label text="LH987 - DLH" styleClass="flight-code">
+                                    <font>
+                                        <Font name="Inter Bold" size="12"/>
+                                    </font>
+                                </Label>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="⏱" styleClass="status-icon-pending"/>
+                            </HBox>
+                            <Label text="B747" styleClass="aircraft-type">
+                                <font>
+                                    <Font name="Inter" size="10"/>
+                                </font>
+                            </Label>
+                            <Label text="08:00 - 09:30" styleClass="flight-time">
+                                <font>
+                                    <Font name="Inter Medium" size="12"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                        
+                        <VBox styleClass="flight-card" alignment="CENTER_LEFT">
+                            <StackPane.margin>
+                                <Insets left="200" right="60"/>
+                            </StackPane.margin>
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="8"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="4">
+                                <Label text="UA456 - UAL" styleClass="flight-code">
+                                    <font>
+                                        <Font name="Inter Bold" size="12"/>
+                                    </font>
+                                </Label>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="✓" styleClass="status-icon-success"/>
+                            </HBox>
+                            <Label text="B777" styleClass="aircraft-type">
+                                <font>
+                                    <Font name="Inter" size="10"/>
+                                </font>
+                            </Label>
+                            <Label text="11:00 - 13:30" styleClass="flight-time">
+                                <font>
+                                    <Font name="Inter Medium" size="12"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                </HBox>
+                
+                <!-- Stand B01 -->
+                <HBox styleClass="resource-lane" minHeight="80" prefHeight="80">
+                    <Label text="Stand B01" styleClass="resource-label" minWidth="80" maxWidth="80">
+                        <font>
+                            <Font name="Inter SemiBold" size="14"/>
+                        </font>
+                    </Label>
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <HBox styleClass="grid-lines">
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                    </StackPane>
+                </HBox>
+                
+                <!-- Stand B02 -->
+                <HBox styleClass="resource-lane" minHeight="80" prefHeight="80">
+                    <Label text="Stand B02" styleClass="resource-label" minWidth="80" maxWidth="80">
+                        <font>
+                            <Font name="Inter SemiBold" size="14"/>
+                        </font>
+                    </Label>
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <HBox styleClass="grid-lines">
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                        
+                        <!-- Flight Card with Error -->
+                        <VBox styleClass="flight-card, flight-error" alignment="CENTER_LEFT">
+                            <StackPane.margin>
+                                <Insets left="40" right="200"/>
+                            </StackPane.margin>
+                            <padding>
+                                <Insets top="8" right="8" bottom="8" left="12"/>
+                            </padding>
+                            <HBox alignment="CENTER_LEFT" spacing="4">
+                                <Label text="BA249 - BAW" styleClass="flight-code">
+                                    <font>
+                                        <Font name="Inter Bold" size="12"/>
+                                    </font>
+                                </Label>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="⚠" styleClass="status-icon-error"/>
+                            </HBox>
+                            <Label text="A380" styleClass="aircraft-type">
+                                <font>
+                                    <Font name="Inter" size="10"/>
+                                </font>
+                            </Label>
+                            <Label text="08:30 - 10:30" styleClass="flight-time">
+                                <font>
+                                    <Font name="Inter Medium" size="12"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                </HBox>
+                
+                <!-- Stand B03 -->
+                <HBox styleClass="resource-lane" minHeight="80" prefHeight="80">
+                    <Label text="Stand B03" styleClass="resource-label" minWidth="80" maxWidth="80">
+                        <font>
+                            <Font name="Inter SemiBold" size="14"/>
+                        </font>
+                    </Label>
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <HBox styleClass="grid-lines">
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Line styleClass="grid-line" endY="80"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                        </HBox>
+                    </StackPane>
+                </HBox>
+                
+            </VBox>
+            
+            <!-- Current Time Indicator -->
+            <Line styleClass="current-time-line" startY="40" endY="480" 
+                  StackPane.alignment="TOP_LEFT">
+                <StackPane.margin>
+                    <Insets left="213"/>
+                </StackPane.margin>
+            </Line>
+            <Circle styleClass="current-time-dot" radius="6" 
+                   StackPane.alignment="TOP_LEFT">
+                <StackPane.margin>
+                    <Insets top="34" left="207"/>
+                </StackPane.margin>
+            </Circle>
+            
+        </StackPane>
+    </ScrollPane>
+    
+</VBox>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connexion AIGE-APRON-SMART</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1773cf",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root">
+<div class="flex flex-1 flex-col items-center justify-center p-4">
+<div class="flex w-full max-w-sm flex-col items-center">
+<!-- Logo -->
+<div class="w-24 h-24 mb-6">
+<img class="w-full h-full object-contain rounded-full" data-alt="AIGE-APRON-SMART application logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAibYrsIaVJYkNcIhqaEUcwwiC--MBGsq71ffx44c7z9rbSl6HcjVEAWg-RkO7HY1G2-BY7PruaLxuq-lUxNR8_Fij1gb4roqTAkwmy5C08BprpLcAdR756anjfmS9PL8ohlTLXoXeGf-NJfy-uhHd1p2OiI_TTcGvnPO5ls7V89-QPp5n3fBBdGnRrrSy7HPPjSqfMBvM7ZiI4u8EP3ftlJk56ducX0sMSj1X3kwOvDU9cQHqHJQDNYp6y3WZS2hLgFFJ5HqcyL38L"/>
+</div>
+<!-- Headline -->
+<h1 class="text-gray-900 dark:text-white tracking-light text-3xl font-bold leading-tight text-center pb-8">Connexion</h1>
+<div class="w-full space-y-4">
+<!-- Username Field -->
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal pb-2">Nom d'utilisateur</p>
+<div class="relative flex w-full items-center">
+<span class="material-symbols-outlined absolute left-3 text-gray-400 dark:text-gray-500 pointer-events-none">person</span>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 pl-11 pr-4 text-base font-normal leading-normal" placeholder="Entrez votre nom d'utilisateur" type="text" value=""/>
+</div>
+</label>
+<!-- Password Field -->
+<label class="flex flex-col w-full">
+<p class="text-gray-700 dark:text-gray-300 text-sm font-medium leading-normal pb-2">Mot de passe</p>
+<div class="relative flex w-full items-center">
+<span class="material-symbols-outlined absolute left-3 text-gray-400 dark:text-gray-500 pointer-events-none">lock</span>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 focus:border-primary h-14 placeholder:text-gray-400 dark:placeholder:text-gray-500 pl-11 pr-4 text-base font-normal leading-normal" placeholder="Entrez votre mot de passe" type="password" value=""/>
+</div>
+</label>
+<!-- Forgot Password Link -->
+<div class="w-full text-right">
+<a class="text-primary text-sm font-medium leading-normal hover:underline" href="#">Mot de passe oublié ?</a>
+</div>
+</div>
+<!-- Login Button -->
+<button class="flex items-center justify-center w-full h-14 mt-8 rounded-lg bg-primary text-white text-base font-bold leading-normal transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-dark focus:ring-primary">Se connecter</button>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard Principal - AIGE-APRON-SMART</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300,400,500,700" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1773cf",
+              "background-light": "#f6f7f8",
+              "background-dark": "#111921",
+              "card-light": "#ffffff",
+              "card-dark": "#1a2632",
+              "text-light": "#111921",
+              "text-dark": "#ffffff",
+              "text-muted-light": "#6b7280",
+              "text-muted-dark": "#93adc8",
+              "border-light": "#e5e7eb",
+              "border-dark": "#344d65"
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 24px;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<!-- Top App Bar -->
+<header class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<h1 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1">AIGE</h1>
+<div class="flex items-center justify-end"><p class="text-text-muted-light dark:text-text-muted-dark text-base font-bold leading-normal tracking-[0.015em] shrink-0">14:30</p></div>
+</header>
+<main class="flex-1 flex flex-col gap-4 p-4">
+<!-- Real-time Overview Section -->
+<section>
+<h2 class="text-text-light dark:text-text-dark text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-2">Aperçu en Temps Réel</h2>
+<div class="flex flex-wrap gap-4">
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg p-4 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">Postes Occupés</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-2xl font-bold leading-tight">58 / 70</p>
+</div>
+<div class="flex min-w-[158px] flex-1 flex-col gap-2 rounded-lg p-4 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">Taux d'Utilisation</p>
+<p class="text-primary tracking-tight text-2xl font-bold leading-tight">83%</p>
+</div>
+<div class="flex min-w-full flex-col gap-2 rounded-lg p-4 bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark">
+<p class="text-text-muted-light dark:text-text-muted-dark text-sm font-medium leading-normal">Vols Prévus (2h)</p>
+<p class="text-text-light dark:text-text-dark tracking-tight text-2xl font-bold leading-tight">12</p>
+</div>
+</div>
+</section>
+<!-- System Status Card -->
+<section>
+<div class="flex items-center justify-between gap-4 rounded-lg bg-card-light dark:bg-card-dark p-4 border border-border-light dark:border-border-dark">
+<div class="flex flex-col gap-1">
+<p class="text-text-light dark:text-text-dark text-base font-bold leading-tight">État du Système</p>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-green-500 rounded-full"></span>
+<p class="text-green-500 text-sm font-medium leading-normal">Opérationnel</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+</div>
+</section>
+<!-- Main Modules Section -->
+<section>
+<h2 class="text-text-light dark:text-text-dark text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3 pt-5">Modules Principaux</h2>
+<div class="grid grid-cols-2 gap-4">
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square" href="#">
+<span class="material-symbols-outlined text-primary text-4xl">radar</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Radar Live</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square" href="#">
+<span class="material-symbols-outlined text-primary text-4xl">view_in_ar</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Visualisation 3D</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square" href="#">
+<span class="material-symbols-outlined text-primary text-4xl">local_parking</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Gestion Postes</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square" href="#">
+<span class="material-symbols-outlined text-primary text-4xl">calendar_month</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Planification</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square relative" href="#">
+<div class="absolute top-4 right-4 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">3</div>
+<span class="material-symbols-outlined text-primary text-4xl">notifications</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Alertes</p>
+</a>
+<a class="flex flex-col items-center justify-center gap-3 rounded-lg bg-card-light dark:bg-card-dark p-6 text-center border border-border-light dark:border-border-dark aspect-square" href="#">
+<span class="material-symbols-outlined text-primary text-4xl">history</span>
+<p class="text-text-light dark:text-text-dark text-sm font-bold leading-tight">Historique</p>
+</a>
+</div>
+</section>
+</main>
+</div>
+</body></html>

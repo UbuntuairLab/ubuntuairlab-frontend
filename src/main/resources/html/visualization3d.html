@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { margin: 0; overflow: hidden; background: #111921; }
+        #canvas3d { width: 100%; height: 100vh; }
+        #legend {
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(17,25,33,0.9); padding: 12px 16px;
+            border-radius: 8px; color: white; font-family: Inter, sans-serif;
+            font-size: 12px;
+        }
+        .legend-item { display: flex; align-items: center; margin: 6px 0; }
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; margin-right: 10px; }
+        #stats {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(17,25,33,0.9); padding: 12px 16px;
+            border-radius: 8px; color: white; font-family: Inter, sans-serif;
+            font-size: 14px;
+        }
+        #info {
+            position: absolute; bottom: 20px; right: 20px;
+            background: rgba(17,25,33,0.9); padding: 8px 12px;
+            border-radius: 8px; color: #9ca3af; font-family: Inter, sans-serif;
+            font-size: 11px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="canvas3d"></div>
+    <div id="legend">
+        <div style="font-weight:bold;margin-bottom:8px;">Légende</div>
+        <div class="legend-item"><div class="legend-color" style="background:#22c55e"></div>Libre</div>
+        <div class="legend-item"><div class="legend-color" style="background:#ef4444"></div>Occupé</div>
+        <div class="legend-item"><div class="legend-color" style="background:#f97316"></div>Réservé</div>
+        <div class="legend-item"><div class="legend-color" style="background:#6b7280"></div>Maintenance</div>
+    </div>
+    <div id="stats">
+        <div style="font-weight:bold;margin-bottom:8px;">État du Parking</div>
+        <div id="totalStands">Total: 18 postes</div>
+        <div id="occupiedCount" style="color:#ef4444">Occupés: 7</div>
+        <div id="freeCount" style="color:#22c55e">Libres: 8</div>
+        <div id="reservedCount" style="color:#f97316">Réservés: 3</div>
+    </div>
+    <div id="info">
+        Glisser: Rotation | Molette: Zoom
+    </div>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x111921);
+        scene.fog = new THREE.Fog(0x111921, 200, 500);
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(80, 100, 120);
+        camera.lookAt(0, 0, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.getElementById('canvas3d').appendChild(renderer.domElement);
+        
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+        const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        sunLight.position.set(50, 100, 50);
+        sunLight.castShadow = true;
+        scene.add(sunLight);
+        
+        // Ground (apron area)
+        const groundGeometry = new THREE.PlaneGeometry(350, 250);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x1a2632 });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+        
+        // Runway
+        const runwayGeometry = new THREE.PlaneGeometry(300, 35);
+        const runwayMaterial = new THREE.MeshStandardMaterial({ color: 0x2a3847 });
+        const runway = new THREE.Mesh(runwayGeometry, runwayMaterial);
+        runway.rotation.x = -Math.PI / 2;
+        runway.position.set(0, 0.1, -90);
+        scene.add(runway);
+        
+        // Runway markings (center line)
+        const markingMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+        for (let i = -130; i < 130; i += 25) {
+            const marking = new THREE.Mesh(new THREE.PlaneGeometry(10, 1.5), markingMaterial);
+            marking.rotation.x = -Math.PI / 2;
+            marking.position.set(i, 0.15, -90);
+            scene.add(marking);
+        }
+        
+        // Taxiway markings
+        const taxiwayMaterial = new THREE.MeshStandardMaterial({ color: 0xfbbf24 });
+        for (let z = -60; z <= 80; z += 30) {
+            const line = new THREE.Mesh(new THREE.PlaneGeometry(2, 8), taxiwayMaterial);
+            line.rotation.x = -Math.PI / 2;
+            line.position.set(-130, 0.12, z);
+            scene.add(line);
+        }
+        
+        // Materials for different stand statuses
+        const standMaterials = {
+            libre: new THREE.MeshStandardMaterial({ color: 0x22c55e }),
+            free: new THREE.MeshStandardMaterial({ color: 0x22c55e }),
+            occupe: new THREE.MeshStandardMaterial({ color: 0xef4444 }),
+            occupied: new THREE.MeshStandardMaterial({ color: 0xef4444 }),
+            reserve: new THREE.MeshStandardMaterial({ color: 0xf97316 }),
+            reserved: new THREE.MeshStandardMaterial({ color: 0xf97316 }),
+            militaire: new THREE.MeshStandardMaterial({ color: 0x1773cf }),
+            military: new THREE.MeshStandardMaterial({ color: 0x1773cf }),
+            maintenance: new THREE.MeshStandardMaterial({ color: 0x6b7280 })
+        };
+        
+        const stands = [];
+        const aircraft = [];
+        
+        // Create parking stand with optional aircraft
+        function createStand(x, z, id, status, size) {
+            const width = size === 'large' ? 14 : size === 'medium' ? 10 : 8;
+            const depth = size === 'large' ? 18 : size === 'medium' ? 14 : 10;
+            
+            // Stand platform
+            const standGeometry = new THREE.BoxGeometry(width, 0.4, depth);
+            const stand = new THREE.Mesh(standGeometry, standMaterials[status] || standMaterials.libre);
+            stand.position.set(x, 0.2, z);
+            stand.castShadow = true;
+            stand.userData = { id: id, status: status };
+            scene.add(stand);
+            stands.push(stand);
+            
+            // Stand border/outline
+            const borderGeometry = new THREE.EdgesGeometry(standGeometry);
+            const borderMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 });
+            const border = new THREE.LineSegments(borderGeometry, borderMaterial);
+            border.position.copy(stand.position);
+            scene.add(border);
+            
+            // Stand label (3D text substitute - a small marker)
+            const labelGeometry = new THREE.PlaneGeometry(width * 0.6, 3);
+            const canvas = document.createElement('canvas');
+            canvas.width = 128; canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#111921';
+            ctx.fillRect(0, 0, 128, 32);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(id, 64, 24);
+            const labelTexture = new THREE.CanvasTexture(canvas);
+            const labelMaterial = new THREE.MeshBasicMaterial({ map: labelTexture, transparent: true });
+            const label = new THREE.Mesh(labelGeometry, labelMaterial);
+            label.rotation.x = -Math.PI / 2;
+            label.position.set(x, 0.5, z + depth/2 + 2);
+            scene.add(label);
+            
+            // Add aircraft if occupied
+            if (status === 'occupe' || status === 'occupied') {
+                createAircraft(x, z, size);
+            }
+        }
+        
+        function createAircraft(x, z, size) {
+            const bodyLength = size === 'large' ? 12 : size === 'medium' ? 8 : 5;
+            const bodyRadius = size === 'large' ? 2 : size === 'medium' ? 1.5 : 1;
+            
+            // Fuselage
+            const bodyGeometry = new THREE.CylinderGeometry(bodyRadius, bodyRadius, bodyLength, 16);
+            const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.rotation.z = Math.PI / 2;
+            body.position.set(x, bodyRadius + 0.5, z);
+            body.castShadow = true;
+            scene.add(body);
+            aircraft.push(body);
+            
+            // Nose cone
+            const noseGeometry = new THREE.ConeGeometry(bodyRadius, 3, 16);
+            const noseMaterial = new THREE.MeshStandardMaterial({ color: 0xe5e7eb });
+            const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+            nose.rotation.z = -Math.PI / 2;
+            nose.position.set(x - bodyLength/2 - 1.5, bodyRadius + 0.5, z);
+            scene.add(nose);
+            
+            // Wings
+            const wingSpan = size === 'large' ? 16 : size === 'medium' ? 12 : 8;
+            const wingGeometry = new THREE.BoxGeometry(4, 0.3, wingSpan);
+            const wingMaterial = new THREE.MeshStandardMaterial({ color: 0xe5e7eb });
+            const wings = new THREE.Mesh(wingGeometry, wingMaterial);
+            wings.position.set(x + 1, bodyRadius + 0.3, z);
+            wings.castShadow = true;
+            scene.add(wings);
+            
+            // Tail fin
+            const tailGeometry = new THREE.BoxGeometry(0.3, 4, 3);
+            const tailMaterial = new THREE.MeshStandardMaterial({ color: 0x1773cf });
+            const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+            tail.position.set(x + bodyLength/2 - 1, bodyRadius + 2.5, z);
+            scene.add(tail);
+            
+            // Horizontal stabilizers
+            const hstabGeometry = new THREE.BoxGeometry(2, 0.2, 6);
+            const hstab = new THREE.Mesh(hstabGeometry, wingMaterial);
+            hstab.position.set(x + bodyLength/2 - 1, bodyRadius + 0.8, z);
+            scene.add(hstab);
+            
+            // Engines (for large aircraft)
+            if (size === 'large' || size === 'medium') {
+                const engineGeometry = new THREE.CylinderGeometry(0.6, 0.8, 2.5, 12);
+                const engineMaterial = new THREE.MeshStandardMaterial({ color: 0x4b5563 });
+                
+                const engine1 = new THREE.Mesh(engineGeometry, engineMaterial);
+                engine1.rotation.z = Math.PI / 2;
+                engine1.position.set(x + 1, bodyRadius - 0.5, z - wingSpan/3);
+                scene.add(engine1);
+                
+                const engine2 = new THREE.Mesh(engineGeometry, engineMaterial);
+                engine2.rotation.z = Math.PI / 2;
+                engine2.position.set(x + 1, bodyRadius - 0.5, z + wingSpan/3);
+                scene.add(engine2);
+            }
+        }
+        
+        // Create stands - 18 postes de l'aéroport Gnassingbé Eyadéma
+        // Zone N (Nord) - Grands avions
+        const zoneNStands = [
+            { id: 'N2', x: -60, z: -30, status: 'occupe', size: 'large' },
+            { id: 'N1', x: -20, z: -30, status: 'libre', size: 'large' }
+        ];
+        
+        // Zone P (Principale) - Moyens/Grands avions
+        const zonePStands = [
+            { id: 'P1', x: 20, z: -30, status: 'libre', size: 'large' },
+            { id: 'P2', x: 60, z: -30, status: 'occupe', size: 'large' },
+            { id: 'P3', x: 100, z: -30, status: 'reserve', size: 'medium' },
+            { id: 'P4', x: -60, z: 10, status: 'libre', size: 'medium' },
+            { id: 'P5', x: -20, z: 10, status: 'occupe', size: 'medium' }
+        ];
+        
+        // Zone S (Sud) - Petits/Moyens avions
+        const zoneSStands = [
+            { id: 'S1', x: 20, z: 10, status: 'libre', size: 'medium' },
+            { id: 'S2', x: 60, z: 10, status: 'maintenance', size: 'medium' },
+            { id: 'S3', x: 100, z: 10, status: 'occupe', size: 'small' },
+            { id: 'S4', x: -60, z: 50, status: 'libre', size: 'small' },
+            { id: 'S5', x: -20, z: 50, status: 'reserve', size: 'small' },
+            { id: 'S6', x: 20, z: 50, status: 'libre', size: 'small' },
+            { id: 'S7', x: 60, z: 50, status: 'occupe', size: 'small' },
+            { id: 'S8', x: 100, z: 50, status: 'libre', size: 'small' },
+            { id: 'S9', x: -40, z: 85, status: 'occupe', size: 'small' },
+            { id: 'S10A', x: 20, z: 85, status: 'libre', size: 'small' },
+            { id: 'S10B', x: 70, z: 85, status: 'reserve', size: 'small' }
+        ];
+        
+        // Create all stands
+        [...zoneNStands, ...zonePStands, ...zoneSStands].forEach(stand => {
+            createStand(stand.x, stand.z, stand.id, stand.status, stand.size);
+        });
+        
+        // Terminal building
+        const terminalGeometry = new THREE.BoxGeometry(200, 18, 25);
+        const terminalMaterial = new THREE.MeshStandardMaterial({ color: 0x374151 });
+        const terminal = new THREE.Mesh(terminalGeometry, terminalMaterial);
+        terminal.position.set(0, 9, 115);
+        terminal.castShadow = true;
+        scene.add(terminal);
+        
+        // Terminal windows
+        for (let i = -90; i <= 90; i += 10) {
+            const windowGeometry = new THREE.PlaneGeometry(6, 8);
+            const windowMaterial = new THREE.MeshStandardMaterial({ color: 0x93c5fd, emissive: 0x3b82f6, emissiveIntensity: 0.3 });
+            const window = new THREE.Mesh(windowGeometry, windowMaterial);
+            window.position.set(i, 10, 102.4);
+            scene.add(window);
+        }
+        
+        // Control tower
+        const towerBaseGeometry = new THREE.CylinderGeometry(6, 7, 45, 12);
+        const towerBaseMaterial = new THREE.MeshStandardMaterial({ color: 0x4b5563 });
+        const towerBase = new THREE.Mesh(towerBaseGeometry, towerBaseMaterial);
+        towerBase.position.set(130, 22.5, 90);
+        towerBase.castShadow = true;
+        scene.add(towerBase);
+        
+        const towerTopGeometry = new THREE.CylinderGeometry(10, 8, 10, 12);
+        const towerTopMaterial = new THREE.MeshStandardMaterial({ color: 0x1773cf });
+        const towerTop = new THREE.Mesh(towerTopGeometry, towerTopMaterial);
+        towerTop.position.set(130, 50, 90);
+        scene.add(towerTop);
+        
+        // Tower windows (control room)
+        const towerWindowGeometry = new THREE.CylinderGeometry(9.5, 9.5, 6, 12, 1, true);
+        const towerWindowMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x93c5fd, 
+            emissive: 0x3b82f6, 
+            emissiveIntensity: 0.5,
+            side: THREE.DoubleSide 
+        });
+        const towerWindow = new THREE.Mesh(towerWindowGeometry, towerWindowMaterial);
+        towerWindow.position.set(130, 50, 90);
+        scene.add(towerWindow);
+        
+        // Mouse controls
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let targetRotation = { x: 0.4, y: 0.8 };
+        let cameraDistance = 180;
+        
+        renderer.domElement.addEventListener('mousedown', (e) => { 
+            isDragging = true; 
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        renderer.domElement.addEventListener('mouseup', () => { isDragging = false; });
+        renderer.domElement.addEventListener('mouseleave', () => { isDragging = false; });
+        renderer.domElement.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                targetRotation.y += deltaX * 0.008;
+                targetRotation.x += deltaY * 0.008;
+                targetRotation.x = Math.max(0.1, Math.min(Math.PI/2.5, targetRotation.x));
+            }
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        renderer.domElement.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            cameraDistance += e.deltaY * 0.15;
+            cameraDistance = Math.max(80, Math.min(350, cameraDistance));
+        }, { passive: false });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Smooth camera movement
+            camera.position.x = Math.sin(targetRotation.y) * Math.cos(targetRotation.x) * cameraDistance;
+            camera.position.y = Math.sin(targetRotation.x) * cameraDistance + 30;
+            camera.position.z = Math.cos(targetRotation.y) * Math.cos(targetRotation.x) * cameraDistance;
+            camera.lookAt(0, 0, 30);
+            
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // API functions for Java controller
+        function setZoom(value) {
+            cameraDistance = 80 + (100 - value) * 2.7;
+        }
+        
+        function resetView() {
+            targetRotation = { x: 0.4, y: 0.8 };
+            cameraDistance = 180;
+        }
+        
+        function updateParkingData(data) {
+            let counts = { libre: 0, occupe: 0, reserve: 0, militaire: 0, maintenance: 0 };
+            
+            data.forEach(d => {
+                const stand = stands.find(s => s.userData.id === d.id);
+                if (stand && standMaterials[d.status]) {
+                    stand.material = standMaterials[d.status];
+                    stand.userData.status = d.status;
+                }
+                counts[d.status] = (counts[d.status] || 0) + 1;
+            });
+            
+            // Update stats display
+            document.getElementById('totalStands').textContent = 'Total: ' + data.length + ' postes';
+            document.getElementById('occupiedCount').textContent = 'Occupés: ' + (counts.occupe || counts.occupied || 0);
+            document.getElementById('freeCount').textContent = 'Libres: ' + (counts.libre || counts.free || 0);
+            document.getElementById('reservedCount').textContent = 'Réservés: ' + (counts.reserve || counts.reserved || 0);
+            document.getElementById('militaryCount').textContent = 'Militaires: ' + (counts.militaire || counts.military || 0);
+        }
+        
+        function toggleWeather(enabled) {
+            if (enabled) {
+                scene.fog = new THREE.Fog(0x111921, 200, 500);
+            } else {
+                scene.fog = null;
+            }
+        }
+        
+        function toggleLabels(enabled) {
+            // Labels are always shown in this version
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.aige.apronsmart.controllers.modules.AlertsController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox prefHeight="884.0" prefWidth="480.0" spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Button styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="←" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Label text="Alertes" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" onAction="#handleSettings" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="⚙" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter Chips -->
+    <ScrollPane fitToHeight="true" styleClass="chip-scroll">
+        <VBox.margin>
+            <Insets top="0" right="16" bottom="0" left="16"/>
+        </VBox.margin>
+        <HBox spacing="8" styleClass="chip-container">
+            <padding>
+                <Insets top="8" bottom="8"/>
+            </padding>
+            
+            <Button fx:id="typeFilterButton" styleClass="chip-button, chip-selected">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Type: Tous" styleClass="chip-label-selected">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon-selected"/>
+                    </HBox>
+                </graphic>
+            </Button>
+            
+            <Button fx:id="statusFilterButton" styleClass="chip-button">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Statut: Nouveau" styleClass="chip-label">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon"/>
+                    </HBox>
+                </graphic>
+            </Button>
+            
+            <Button fx:id="periodFilterButton" styleClass="chip-button">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Période: 24h" styleClass="chip-label">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </HBox>
+    </ScrollPane>
+    
+    <!-- Segmented Sort Buttons -->
+    <HBox styleClass="sort-container">
+        <padding>
+            <Insets top="8" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <HBox styleClass="segmented-control" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="4" right="4" bottom="4" left="4"/>
+            </padding>
+            
+            <ToggleButton text="Trier par : Criticité" styleClass="segment-button" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+                <toggleGroup>
+                    <ToggleGroup fx:id="sortGroup"/>
+                </toggleGroup>
+            </ToggleButton>
+            
+            <ToggleButton text="Descendant" styleClass="segment-button" selected="true" 
+                         toggleGroup="$sortGroup" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+            </ToggleButton>
+        </HBox>
+    </HBox>
+    
+    <!-- Alerts List -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="alerts-scroll">
+        <VBox fx:id="alertsContainer" spacing="12" styleClass="alerts-container">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Sample alerts will be added programmatically -->
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>
+
+</StackPane>

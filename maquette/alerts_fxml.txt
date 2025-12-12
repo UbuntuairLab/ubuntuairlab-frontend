@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.ModuleAlertesController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root"
+      spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Region minWidth="48" minHeight="48"/>
+        
+        <Label text="Alertes" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="⚙" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter Chips -->
+    <ScrollPane fitToHeight="true" styleClass="chip-scroll">
+        <VBox.margin>
+            <Insets top="0" right="16" bottom="0" left="16"/>
+        </VBox.margin>
+        <HBox spacing="8" styleClass="chip-container">
+            <padding>
+                <Insets top="8" bottom="8"/>
+            </padding>
+            
+            <Button styleClass="chip-button, chip-selected">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Type: Tous" styleClass="chip-label-selected">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon-selected"/>
+                    </HBox>
+                </graphic>
+            </Button>
+            
+            <Button styleClass="chip-button">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Statut: Nouveau" styleClass="chip-label">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon"/>
+                    </HBox>
+                </graphic>
+            </Button>
+            
+            <Button styleClass="chip-button">
+                <graphic>
+                    <HBox spacing="6" alignment="CENTER">
+                        <Label text="Période: 24h" styleClass="chip-label">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="▼" styleClass="chip-icon"/>
+                    </HBox>
+                </graphic>
+            </Button>
+        </HBox>
+    </ScrollPane>
+    
+    <!-- Segmented Sort Buttons -->
+    <HBox styleClass="sort-container">
+        <padding>
+            <Insets top="8" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <HBox styleClass="segmented-control" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="4" right="4" bottom="4" left="4"/>
+            </padding>
+            
+            <ToggleButton text="Trier par : Criticité" styleClass="segment-button" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+                <toggleGroup>
+                    <ToggleGroup fx:id="sortGroup"/>
+                </toggleGroup>
+            </ToggleButton>
+            
+            <ToggleButton text="Descendant" styleClass="segment-button" selected="true" 
+                         toggleGroup="$sortGroup" HBox.hgrow="ALWAYS">
+                <font>
+                    <Font name="Inter Medium" size="14"/>
+                </font>
+            </ToggleButton>
+        </HBox>
+    </HBox>
+    
+    <!-- Alerts List -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="alerts-scroll">
+        <VBox spacing="12" styleClass="alerts-container">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Critical Alert Item -->
+            <HBox spacing="12" styleClass="alert-item" alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                
+                <Region styleClass="alert-indicator-critical" minWidth="6" maxWidth="6" 
+                       minHeight="48" prefHeight="48"/>
+                
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Capteur hors ligne - B12" styleClass="alert-title">
+                        <font>
+                            <Font name="Inter SemiBold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label text="Alerte de sécurité" styleClass="alert-category">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <VBox.margin>
+                            <Insets top="4"/>
+                        </VBox.margin>
+                        <Label text="Il y a 5m" styleClass="alert-time">
+                            <font>
+                                <Font name="Inter" size="12"/>
+                            </font>
+                        </Label>
+                        <Label text="Nouveau" styleClass="badge-new">
+                            <padding>
+                                <Insets top="2" right="8" bottom="2" left="8"/>
+                            </padding>
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Label text="›" styleClass="chevron-icon">
+                    <HBox.margin>
+                        <Insets top="12"/>
+                    </HBox.margin>
+                </Label>
+            </HBox>
+            
+            <!-- High Alert Item -->
+            <HBox spacing="12" styleClass="alert-item" alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                
+                <Region styleClass="alert-indicator-high" minWidth="6" maxWidth="6" 
+                       minHeight="48" prefHeight="48"/>
+                
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Batterie faible - C04" styleClass="alert-title">
+                        <font>
+                            <Font name="Inter SemiBold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label text="Alerte d'équipement" styleClass="alert-category">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <VBox.margin>
+                            <Insets top="4"/>
+                        </VBox.margin>
+                        <Label text="Il y a 15m" styleClass="alert-time">
+                            <font>
+                                <Font name="Inter" size="12"/>
+                            </font>
+                        </Label>
+                        <Label text="Reconnu" styleClass="badge-acknowledged">
+                            <padding>
+                                <Insets top="2" right="8" bottom="2" left="8"/>
+                            </padding>
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Label text="›" styleClass="chevron-icon">
+                    <HBox.margin>
+                        <Insets top="12"/>
+                    </HBox.margin>
+                </Label>
+            </HBox>
+            
+            <!-- Medium Alert Item -->
+            <HBox spacing="12" styleClass="alert-item" alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                
+                <Region styleClass="alert-indicator-medium" minWidth="6" maxWidth="6" 
+                       minHeight="48" prefHeight="48"/>
+                
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Obstruction détectée - A07" styleClass="alert-title">
+                        <font>
+                            <Font name="Inter SemiBold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label text="Alerte opérationnelle" styleClass="alert-category">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <VBox.margin>
+                            <Insets top="4"/>
+                        </VBox.margin>
+                        <Label text="Il y a 45m" styleClass="alert-time">
+                            <font>
+                                <Font name="Inter" size="12"/>
+                            </font>
+                        </Label>
+                        <Label text="Reconnu" styleClass="badge-acknowledged">
+                            <padding>
+                                <Insets top="2" right="8" bottom="2" left="8"/>
+                            </padding>
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Label text="›" styleClass="chevron-icon">
+                    <HBox.margin>
+                        <Insets top="12"/>
+                    </HBox.margin>
+                </Label>
+            </HBox>
+            
+            <!-- Resolved Alert Item -->
+            <HBox spacing="12" styleClass="alert-item, alert-resolved" alignment="TOP_LEFT">
+                <padding>
+                    <Insets top="12" right="12" bottom="12" left="12"/>
+                </padding>
+                
+                <Region styleClass="alert-indicator-resolved" minWidth="6" maxWidth="6" 
+                       minHeight="48" prefHeight="48"/>
+                
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Accès non autorisé - D11" styleClass="alert-title">
+                        <font>
+                            <Font name="Inter SemiBold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label text="Alerte de sécurité" styleClass="alert-category">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <VBox.margin>
+                            <Insets top="4"/>
+                        </VBox.margin>
+                        <Label text="Il y a 2h" styleClass="alert-time">
+                            <font>
+                                <Font name="Inter" size="12"/>
+                            </font>
+                        </Label>
+                        <Label text="Résolu" styleClass="badge-resolved">
+                            <padding>
+                                <Insets top="2" right="8" bottom="2" left="8"/>
+                            </padding>
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Label text="›" styleClass="chevron-icon">
+                    <HBox.margin>
+                        <Insets top="12"/>
+                    </HBox.margin>
+                </Label>
+            </HBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>

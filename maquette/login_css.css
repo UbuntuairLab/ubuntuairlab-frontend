@@ -1,0 +1,107 @@
+/* Login Screen Stylesheet */
+
+/* Root Styling */
+.root {
+    -fx-background-color: #111921;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* Login Title */
+.login-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Field Labels */
+.field-label {
+    -fx-text-fill: #d1d5db;
+    -fx-font-weight: 500;
+}
+
+/* Input Container */
+.input-container {
+    -fx-background-color: transparent;
+}
+
+.input-icon {
+    -fx-font-size: 20px;
+    -fx-text-fill: #6b7280;
+}
+
+/* Text Input Styling */
+.text-input {
+    -fx-background-color: #1f2937;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #6b7280;
+    -fx-border-color: #374151;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-insets: 0;
+}
+
+.text-input:focused {
+    -fx-border-color: #1773cf;
+    -fx-border-width: 2px;
+    -fx-background-color: #1f2937;
+    -fx-effect: dropshadow(gaussian, rgba(23, 115, 207, 0.3), 8, 0, 0, 0);
+}
+
+/* TextField specific */
+TextField.text-input {
+    -fx-background-color: #1f2937;
+    -fx-text-fill: white;
+}
+
+TextField.text-input:focused {
+    -fx-background-color: #1f2937;
+}
+
+/* PasswordField specific */
+PasswordField.text-input {
+    -fx-background-color: #1f2937;
+    -fx-text-fill: white;
+}
+
+PasswordField.text-input:focused {
+    -fx-background-color: #1f2937;
+}
+
+/* Forgot Password Link */
+.forgot-password-link {
+    -fx-text-fill: #1773cf;
+    -fx-font-weight: 500;
+    -fx-border-width: 0;
+    -fx-padding: 4px 0;
+}
+
+.forgot-password-link:hover {
+    -fx-underline: true;
+}
+
+.forgot-password-link:visited {
+    -fx-text-fill: #1773cf;
+}
+
+/* Login Button */
+.login-button {
+    -fx-background-color: #1773cf;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+    -fx-font-weight: bold;
+}
+
+.login-button:hover {
+    -fx-background-color: #1361b0;
+}
+
+.login-button:pressed {
+    -fx-background-color: #0f4f8f;
+}
+
+.login-button:focused {
+    -fx-border-color: #1773cf;
+    -fx-border-width: 2px;
+    -fx-background-insets: -2;
+}

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.aige.apronsmart.controllers.modules.NotificationsController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox prefHeight="884.0" prefWidth="480.0" spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Button styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="←" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Label text="Notifications" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" onAction="#handleRefresh" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="🔄" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Button styleClass="icon-button" onAction="#handleMarkAllRead" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="✓" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Main Content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="main-scroll">
+        <VBox spacing="16">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Stats Row -->
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <VBox spacing="4" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="12" right="12" bottom="12" left="12"/>
+                    </padding>
+                    <Label text="Non lues" styleClass="stat-label">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="unreadCountLabel" text="0" styleClass="stat-value-warning">
+                        <font>
+                            <Font name="Inter Bold" size="20"/>
+                        </font>
+                    </Label>
+                </VBox>
+                
+                <VBox spacing="4" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="12" right="12" bottom="12" left="12"/>
+                    </padding>
+                    <Label text="Critiques" styleClass="stat-label">
+                        <font>
+                            <Font name="Inter Medium" size="12"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="criticalCountLabel" text="0" styleClass="stat-value-error">
+                        <font>
+                            <Font name="Inter Bold" size="20"/>
+                        </font>
+                    </Label>
+                </VBox>
+            </HBox>
+            
+            <!-- Filter Buttons -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button fx:id="filterAllBtn" text="Tout" styleClass="filter-button,filter-button-active" onAction="#handleFilterAll">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+                <Button fx:id="filterUnreadBtn" text="Non lues" styleClass="filter-button" onAction="#handleFilterUnread">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+                <Button fx:id="filterCriticalBtn" text="Critiques" styleClass="filter-button" onAction="#handleFilterCritical">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+            </HBox>
+            
+            <!-- Notifications List -->
+            <VBox fx:id="notificationsContainer" spacing="12">
+                <!-- Dynamic notification cards will be added here -->
+            </VBox>
+            
+            <!-- Empty State -->
+            <VBox fx:id="emptyState" alignment="CENTER" spacing="16" visible="false" managed="false" styleClass="empty-state">
+                <padding>
+                    <Insets top="60" bottom="60"/>
+                </padding>
+                <Label text="📭" styleClass="empty-icon">
+                    <font>
+                        <Font size="48"/>
+                    </font>
+                </Label>
+                <Label text="Aucune notification" styleClass="empty-text">
+                    <font>
+                        <Font name="Inter Medium" size="16"/>
+                    </font>
+                </Label>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>
+
+</StackPane>

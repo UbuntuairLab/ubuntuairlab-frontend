@@ -1,0 +1,197 @@
+/* Module Planification Stylesheet */
+
+.root {
+    -fx-background-color: #111921;
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* App Bar */
+.app-bar {
+    -fx-background-color: rgba(17, 25, 33, 0.8);
+}
+
+.app-title {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+}
+
+.icon-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.icon-label {
+    -fx-text-fill: white;
+    -fx-font-size: 24px;
+}
+
+/* View Selector */
+.view-selector-container {
+    -fx-background-color: transparent;
+}
+
+.segmented-control {
+    -fx-background-color: #3f3f46;
+    -fx-background-radius: 8px;
+}
+
+.segment-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9ca3af;
+    -fx-background-radius: 6px;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+
+.segment-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.segment-button:selected {
+    -fx-background-color: #1773cf;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0, 0, 1);
+}
+
+/* Calendar Picker */
+.calendar-picker {
+    -fx-background-color: transparent;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+}
+
+.nav-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+}
+
+.date-label {
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+/* Timeline Container */
+.timeline-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.timeline-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.timeline-container {
+    -fx-background-color: transparent;
+}
+
+/* Time Header */
+.time-header {
+    -fx-background-color: #111921;
+    -fx-border-color: #374151;
+    -fx-border-width: 0 0 1 0;
+}
+
+.time-label {
+    -fx-text-fill: #9ca3af;
+    -fx-alignment: center;
+}
+
+/* Resource Lane */
+.resource-lane {
+    -fx-background-color: transparent;
+    -fx-border-color: #374151;
+    -fx-border-width: 0 0 1 0;
+}
+
+.resource-label {
+    -fx-text-fill: #9ca3af;
+    -fx-alignment: center-right;
+    -fx-padding: 0 8 0 0;
+}
+
+/* Grid Lines */
+.grid-lines {
+    -fx-background-color: transparent;
+}
+
+.grid-line {
+    -fx-stroke: #374151;
+    -fx-stroke-width: 1;
+    -fx-stroke-dash-array: 5 5;
+}
+
+/* Flight Cards */
+.flight-card {
+    -fx-background-color: #3f3f46;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-min-height: 64;
+}
+
+.flight-card:hover {
+    -fx-background-color: #52525b;
+}
+
+.flight-warning {
+    -fx-border-color: #fbbf24;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 8px;
+}
+
+.flight-error {
+    -fx-border-color: #ef4444;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 8px;
+}
+
+.flight-code {
+    -fx-text-fill: white;
+}
+
+.aircraft-type {
+    -fx-text-fill: #9ca3af;
+}
+
+.flight-time {
+    -fx-text-fill: white;
+}
+
+.status-icon-success {
+    -fx-text-fill: #4ade80;
+    -fx-font-size: 16px;
+}
+
+.status-icon-pending {
+    -fx-text-fill: #fbbf24;
+    -fx-font-size: 16px;
+}
+
+.status-icon-error {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 16px;
+}
+
+/* Current Time Indicator */
+.current-time-line {
+    -fx-stroke: #1773cf;
+    -fx-stroke-width: 2;
+}
+
+.current-time-dot {
+    -fx-fill: #1773cf;
+}

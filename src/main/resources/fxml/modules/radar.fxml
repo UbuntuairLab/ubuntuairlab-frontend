@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.aige.apronsmart.controllers.modules.RadarController"
+           prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Map Background -->
+    <StackPane fx:id="mapContainer">
+        <WebView fx:id="mapWebView" mouseTransparent="false"/>
+    </StackPane>
+    
+    <!-- Main Container - overlay on top of map -->
+    <VBox alignment="TOP_CENTER" spacing="0" mouseTransparent="false" pickOnBounds="false" style="-fx-background-color: transparent;">
+        
+        <!-- Top App Bar -->
+        <HBox alignment="CENTER" styleClass="app-bar-transparent" prefHeight="64.0" pickOnBounds="true">
+            <padding>
+                <Insets top="16" right="16" bottom="8" left="16"/>
+            </padding>
+            
+            <Button fx:id="backButton" styleClass="icon-button-light" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <graphic>
+                    <Label text="←" styleClass="icon-label-light"/>
+                </graphic>
+            </Button>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label text="Module Radar Live" styleClass="app-title-light">
+                <font>
+                    <Font name="Inter Bold" size="18"/>
+                </font>
+            </Label>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Button fx:id="settingsButton" styleClass="icon-button-light" onAction="#handleSettings" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <graphic>
+                    <Label text="⚙️" styleClass="icon-label-light"/>
+                </graphic>
+            </Button>
+            
+            <Button fx:id="syncButton" styleClass="icon-button-light" onAction="#handleSync" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <graphic>
+                    <Label text="🔄" styleClass="icon-label-light"/>
+                </graphic>
+            </Button>
+            
+            <Button styleClass="icon-button-light" onAction="#handleMenu" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <graphic>
+                    <Label text="☰" styleClass="icon-label-light"/>
+                </graphic>
+            </Button>
+        </HBox>
+        
+        <Region VBox.vgrow="ALWAYS"/>
+        
+    </VBox>
+    
+    <!-- Bottom Sheet - Separate overlay, Hidden by default, shows when a flight is clicked -->
+    <VBox fx:id="bottomSheet" styleClass="bottom-sheet" prefHeight="280.0" maxHeight="280.0" 
+          visible="false" managed="false" StackPane.alignment="BOTTOM_CENTER">
+        
+        <!-- Drag Handle (click to close) -->
+        <HBox alignment="CENTER" prefHeight="20.0" onMouseClicked="#handleCloseBottomSheet" style="-fx-cursor: hand;">
+            <Region styleClass="drag-handle" prefWidth="36.0" prefHeight="4.0"/>
+        </HBox>
+        
+        <!-- Flight Details Content -->
+        <VBox styleClass="bottom-sheet-content" VBox.vgrow="ALWAYS" spacing="12">
+            <padding>
+                <Insets top="8" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Flight Header -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="2">
+                    <Label fx:id="bottomSheetFlightNumber" text="ET 920" styleClass="section-title">
+                        <font>
+                            <Font name="Inter Bold" size="24"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="bottomSheetAircraftType" text="Boeing 787-8" styleClass="text-secondary">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="bottomSheetStatus" text="En approche" styleClass="status-badge-warning">
+                    <padding>
+                        <Insets top="6" right="12" bottom="6" left="12"/>
+                    </padding>
+                    <font>
+                        <Font name="Inter Bold" size="12"/>
+                    </font>
+                </Label>
+            </HBox>
+            
+            <!-- Flight Details Grid -->
+            <HBox spacing="24">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Origine" styleClass="detail-label">
+                        <font><Font name="Inter" size="12"/></font>
+                    </Label>
+                    <Label fx:id="bottomSheetOrigin" text="ADD" styleClass="detail-value">
+                        <font><Font name="Inter Bold" size="16"/></font>
+                    </Label>
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Destination" styleClass="detail-label">
+                        <font><Font name="Inter" size="12"/></font>
+                    </Label>
+                    <Label fx:id="bottomSheetDestination" text="LFW" styleClass="detail-value">
+                        <font><Font name="Inter Bold" size="16"/></font>
+                    </Label>
+                </VBox>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="ETA" styleClass="detail-label">
+                        <font><Font name="Inter" size="12"/></font>
+                    </Label>
+                    <Label fx:id="bottomSheetEta" text="10:45" styleClass="detail-value">
+                        <font><Font name="Inter Bold" size="16"/></font>
+                    </Label>
+                </VBox>
+            </HBox>
+            
+            <!-- Assigned Parking -->
+            <HBox spacing="12" alignment="CENTER_LEFT" styleClass="parking-info">
+                <padding>
+                    <Insets top="8" right="12" bottom="8" left="12"/>
+                </padding>
+                <Label text="🅿" styleClass="parking-icon">
+                    <font><Font size="20"/></font>
+                </Label>
+                <VBox spacing="2">
+                    <Label text="Poste assigné" styleClass="detail-label">
+                        <font><Font name="Inter" size="11"/></font>
+                    </Label>
+                    <Label fx:id="bottomSheetParking" text="ST-05 (Zone A)" styleClass="detail-value">
+                        <font><Font name="Inter Bold" size="14"/></font>
+                    </Label>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="bottomSheetAltitude" text="Alt: 3,500 ft" styleClass="text-secondary">
+                    <font><Font name="Inter" size="12"/></font>
+                </Label>
+            </HBox>
+            
+        </VBox>
+    </VBox>
+    
+    <!-- Map UI Controls (Overlaid) -->
+    <VBox alignment="BOTTOM_RIGHT" StackPane.alignment="BOTTOM_RIGHT" maxWidth="56" pickOnBounds="false">
+        <padding>
+            <Insets right="16" bottom="24"/>
+        </padding>
+        
+        <VBox spacing="0" styleClass="map-controls" maxWidth="40">
+            <Button styleClass="map-control-button" onAction="#handleZoomIn" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40">
+                <graphic>
+                    <Label text="+" styleClass="control-icon"/>
+                </graphic>
+            </Button>
+            <Button styleClass="map-control-button" onAction="#handleZoomOut" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40">
+                <graphic>
+                    <Label text="−" styleClass="control-icon"/>
+                </graphic>
+            </Button>
+        </VBox>
+        
+        <Region minHeight="12"/>
+        
+        <Button styleClass="map-control-button-single" onAction="#handleCenterMap" minWidth="40" minHeight="40" maxWidth="40" maxHeight="40">
+            <graphic>
+                <Label text="⊙" styleClass="control-icon"/>
+            </graphic>
+        </Button>
+    </VBox>
+    
+    <!-- Flight Info Popup (Overlaid) - Initially hidden -->
+    <VBox fx:id="flightPopup" styleClass="flight-popup" maxWidth="224" visible="false" StackPane.alignment="TOP_CENTER">
+        <StackPane.margin>
+            <Insets top="200"/>
+        </StackPane.margin>
+        <padding>
+            <Insets top="12" right="12" bottom="12" left="12"/>
+        </padding>
+        
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label fx:id="popupFlightNumber" text="UA901" styleClass="popup-flight-number">
+                <font>
+                    <Font name="Inter Bold" size="18"/>
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="popupStatus" text="On Approach" styleClass="popup-badge">
+                <padding>
+                    <Insets top="2" right="8" bottom="2" left="8"/>
+                </padding>
+                <font>
+                    <Font name="Inter Medium" size="12"/>
+                </font>
+            </Label>
+        </HBox>
+        
+        <VBox spacing="4">
+            <VBox.margin>
+                <Insets top="8"/>
+            </VBox.margin>
+            <Label fx:id="popupAircraftType" text="Boeing 777" styleClass="popup-detail">
+                <font>
+                    <Font name="Inter" size="14"/>
+                </font>
+            </Label>
+            <Label fx:id="popupEta" text="ETA: 14:32 (in 8m)" styleClass="popup-detail">
+                <font>
+                    <Font name="Inter" size="14"/>
+                </font>
+            </Label>
+            <Label fx:id="popupAssignedSpot" text="Assigned: Spot G23" styleClass="popup-detail">
+                <font>
+                    <Font name="Inter" size="14"/>
+                </font>
+            </Label>
+        </VBox>
+    </VBox>
+    
+</StackPane>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.WebView?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.aige.apronsmart.controllers.modules.Visualization3dController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox fx:id="visualization3dContainer" prefHeight="884.0" prefWidth="480.0" spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Button styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="←" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Label text="Visualisation 3D" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" onAction="#handleResetView" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="↻" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Controls Bar -->
+    <HBox styleClass="control-bar" alignment="CENTER_LEFT" spacing="12">
+        <padding>
+            <Insets top="12" right="16" bottom="12" left="16"/>
+        </padding>
+        
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Mode" styleClass="field-label"/>
+            <ComboBox fx:id="viewModeComboBox" maxWidth="Infinity"/>
+        </VBox>
+        
+        <VBox spacing="4">
+            <Label text="Options" styleClass="field-label"/>
+            <HBox spacing="12">
+                <CheckBox fx:id="weatherCheckBox" text="Météo" styleClass="checkbox-dark"/>
+                <CheckBox fx:id="labelsCheckBox" text="Étiquettes" styleClass="checkbox-dark"/>
+            </HBox>
+        </VBox>
+    </HBox>
+    
+    <!-- Zoom Slider -->
+    <HBox alignment="CENTER" spacing="12">
+        <padding>
+            <Insets top="8" right="16" bottom="8" left="16"/>
+        </padding>
+        <Label text="Zoom" styleClass="field-label"/>
+        <Slider fx:id="zoomSlider" min="10" max="100" value="50" HBox.hgrow="ALWAYS" showTickMarks="true"/>
+    </HBox>
+    
+    <!-- 3D View -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <WebView fx:id="webView3d"/>
+    </StackPane>
+    </VBox>
+</StackPane>

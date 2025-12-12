@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.aige.apronsmart.controllers.modules.PostesController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox prefHeight="884.0" prefWidth="480.0" spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Button styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="←" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Label text="Gestion des Postes" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" onAction="#handleRefresh" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="🔄" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Main Content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="main-scroll">
+        <VBox spacing="16">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Stats Row -->
+            <ScrollPane fitToHeight="true" styleClass="stats-scroll">
+                <HBox spacing="12" styleClass="stats-container">
+                    <padding>
+                        <Insets top="4" bottom="4"/>
+                    </padding>
+                    
+                    <VBox spacing="4" styleClass="stat-card" minWidth="120">
+                        <padding>
+                            <Insets top="12" right="12" bottom="12" left="12"/>
+                        </padding>
+                        <Label text="Total" styleClass="stat-label">
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="totalPostesLabel" text="70" styleClass="stat-value">
+                            <font>
+                                <Font name="Inter Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox spacing="4" styleClass="stat-card" minWidth="120">
+                        <padding>
+                            <Insets top="12" right="12" bottom="12" left="12"/>
+                        </padding>
+                        <Label text="Libres" styleClass="stat-label">
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="freePostesLabel" text="12" styleClass="stat-value-success">
+                            <font>
+                                <Font name="Inter Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox spacing="4" styleClass="stat-card" minWidth="120">
+                        <padding>
+                            <Insets top="12" right="12" bottom="12" left="12"/>
+                        </padding>
+                        <Label text="Occupés" styleClass="stat-label">
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="occupiedPostesLabel" text="52" styleClass="stat-value-error">
+                            <font>
+                                <Font name="Inter Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox spacing="4" styleClass="stat-card" minWidth="120">
+                        <padding>
+                            <Insets top="12" right="12" bottom="12" left="12"/>
+                        </padding>
+                        <Label text="Réservés" styleClass="stat-label">
+                            <font>
+                                <Font name="Inter Medium" size="12"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="reservedPostesLabel" text="6" styleClass="stat-value-warning">
+                            <font>
+                                <Font name="Inter Bold" size="20"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </HBox>
+            </ScrollPane>
+            
+            <!-- Actions avancées -->
+            <HBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 8 0;">
+                <Button fx:id="assignButton" text="✈ Assigner Vol" styleClass="action-button" onAction="#handleAssignFlight">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+                <Button fx:id="recallButton" text="📞 Civil Recall" styleClass="action-button-secondary" onAction="#handleCivilRecall">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+                <Button fx:id="transferButton" text="🚁 Military Transfer" styleClass="action-button-secondary" onAction="#handleMilitaryTransfer">
+                    <font>
+                        <Font name="Inter SemiBold" size="13"/>
+                    </font>
+                </Button>
+            </HBox>
+            
+            <!-- Filter Chips -->
+            <ScrollPane fitToHeight="true" styleClass="chip-scroll">
+                <HBox spacing="8" styleClass="chip-container">
+                    <padding>
+                        <Insets top="4" bottom="4"/>
+                    </padding>
+                    
+                    <Button fx:id="typeFilterButton" styleClass="chip-button, chip-selected">
+                        <graphic>
+                            <HBox spacing="6" alignment="CENTER">
+                                <Label text="Type: Tous" styleClass="chip-label-selected">
+                                    <font>
+                                        <Font name="Inter Medium" size="14"/>
+                                    </font>
+                                </Label>
+                                <Label text="▼" styleClass="chip-icon-selected"/>
+                            </HBox>
+                        </graphic>
+                    </Button>
+                    
+                    <Button fx:id="zoneFilterButton" styleClass="chip-button">
+                        <graphic>
+                            <HBox spacing="6" alignment="CENTER">
+                                <Label text="Zone: Toutes" styleClass="chip-label">
+                                    <font>
+                                        <Font name="Inter Medium" size="14"/>
+                                    </font>
+                                </Label>
+                                <Label text="▼" styleClass="chip-icon"/>
+                            </HBox>
+                        </graphic>
+                    </Button>
+                    
+                    <Button fx:id="statusFilterButton" styleClass="chip-button">
+                        <graphic>
+                            <HBox spacing="6" alignment="CENTER">
+                                <Label text="Statut: Tous" styleClass="chip-label">
+                                    <font>
+                                        <Font name="Inter Medium" size="14"/>
+                                    </font>
+                                </Label>
+                                <Label text="▼" styleClass="chip-icon"/>
+                            </HBox>
+                        </graphic>
+                    </Button>
+                    
+                    <Button styleClass="chip-clear" onAction="#handleClearFilters">
+                        <graphic>
+                            <Label text="Effacer" styleClass="chip-clear-label">
+                                <font>
+                                    <Font name="Inter Medium" size="14"/>
+                                </font>
+                            </Label>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </ScrollPane>
+            
+            <!-- Parking Grid -->
+            <GridPane fx:id="postesGrid" hgap="8" vgap="8" styleClass="parking-grid">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="60"/>
+                </columnConstraints>
+                
+                <!-- Parking spots will be added programmatically -->
+            </GridPane>
+            
+            <!-- Legend -->
+            <VBox spacing="12" styleClass="legend-container">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                
+                <Label text="Légende" styleClass="legend-title">
+                    <font>
+                        <Font name="Inter Bold" size="16"/>
+                    </font>
+                </Label>
+                
+                <HBox spacing="24" alignment="CENTER_LEFT">
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Rectangle width="16" height="16" styleClass="legend-color-free"/>
+                        <Label text="Libre" styleClass="legend-label">
+                            <font>
+                                <Font name="Inter" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Rectangle width="16" height="16" styleClass="legend-color-occupied"/>
+                        <Label text="Occupé" styleClass="legend-label">
+                            <font>
+                                <Font name="Inter" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Rectangle width="16" height="16" styleClass="legend-color-reserved"/>
+                        <Label text="Réservé" styleClass="legend-label">
+                            <font>
+                                <Font name="Inter" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                    
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Rectangle width="16" height="16" styleClass="legend-color-military"/>
+                        <Label text="Militaire" styleClass="legend-label">
+                            <font>
+                                <Font name="Inter" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </HBox>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>
+
+</StackPane>

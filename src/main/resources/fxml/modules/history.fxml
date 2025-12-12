@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.aige.apronsmart.controllers.modules.HistoryController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox fx:id="historyContainer" prefHeight="884.0" prefWidth="480.0" spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Button styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="←" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+        
+        <Label text="Historique" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Button styleClass="icon-button" onAction="#handleExport" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+            <graphic>
+                <Label text="📤" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Filter Controls -->
+    <VBox styleClass="control-bar" spacing="12">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Date début" styleClass="field-label"/>
+                <DatePicker fx:id="startDatePicker" maxWidth="Infinity" styleClass="date-picker"/>
+            </VBox>
+            
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Date fin" styleClass="field-label"/>
+                <DatePicker fx:id="endDatePicker" maxWidth="Infinity" styleClass="date-picker"/>
+            </VBox>
+        </HBox>
+        
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Type" styleClass="field-label"/>
+                <ComboBox fx:id="filterTypeComboBox" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+        
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <TextField fx:id="searchField" promptText="Rechercher..." HBox.hgrow="ALWAYS" styleClass="text-input"/>
+            <Button fx:id="searchButton" text="🔍" onAction="#handleSearch" styleClass="icon-button" minWidth="48" minHeight="48"/>
+        </HBox>
+        
+        <Label fx:id="resultsCountLabel" text="0 résultat(s)" styleClass="stat-label"/>
+    </VBox>
+    
+    <!-- Results -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="main-scroll">
+        <VBox fx:id="resultsContainer" spacing="12">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <TableView fx:id="resultsTable" VBox.vgrow="ALWAYS">
+                <!-- Dynamic columns based on search type -->
+            </TableView>
+        </VBox>
+    </ScrollPane>
+    </VBox>
+</StackPane>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Module Planification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1773cf",
+            "background-light": "#f6f7f8",
+            "background-dark": "#111921",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL'0, 'wght'400, 'GRAD'0, 'opsz'24;
+      font-size: 24px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 pb-2 justify-between shrink-0">
+<div class="flex size-12 shrink-0 items-center justify-start">
+<!-- Placeholder for a potential back button or menu -->
+</div>
+<h1 class="text-zinc-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Module Planification</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-zinc-900 dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</header>
+<!-- Segmented View Selector -->
+<div class="flex px-4 py-3">
+<div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-zinc-200 dark:bg-zinc-800 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">
+<span class="truncate">Day</span>
+<input class="invisible w-0" name="view-selector" type="radio" value="Day"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">
+<span class="truncate">Week</span>
+<input class="invisible w-0" name="view-selector" type="radio" value="Week"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">
+<span class="truncate">Month</span>
+<input class="invisible w-0" name="view-selector" type="radio" value="Month"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_1px_3px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-zinc-600 dark:text-zinc-400 text-sm font-medium leading-normal">
+<span class="truncate">Resource</span>
+<input checked="" class="invisible w-0" name="view-selector" type="radio" value="Resource"/>
+</label>
+</div>
+</div>
+<!-- Calendar Picker -->
+<div class="flex flex-wrap items-center justify-center gap-6 p-4 pt-0">
+<div class="flex w-full flex-col gap-0.5">
+<div class="flex items-center p-1 justify-between">
+<button class="flex size-10 items-center justify-center text-zinc-900 dark:text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">chevron_left</span>
+</button>
+<p class="text-zinc-900 dark:text-white text-base font-bold leading-tight flex-1 text-center">October 5, 2024</p>
+<button class="flex size-10 items-center justify-center text-zinc-900 dark:text-white">
+<span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Timeline/Resource View -->
+<main class="flex-1 overflow-auto px-4">
+<div class="relative grid grid-cols-[auto,1fr] gap-x-2">
+<!-- Current Time Indicator -->
+<div class="absolute h-full w-0.5 bg-primary z-20" style="left: calc(64px + 33.33%)">
+<div class="absolute -top-1.5 -translate-x-1/2 w-3 h-3 rounded-full bg-primary"></div>
+</div>
+<!-- Time Header -->
+<div class="sticky top-0 bg-background-light dark:bg-background-dark z-10 col-start-2 grid grid-cols-6 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400">
+<div class="py-2">08:00</div>
+<div class="py-2">09:00</div>
+<div class="py-2">10:00</div>
+<div class="py-2">11:00</div>
+<div class="py-2">12:00</div>
+<div class="py-2">13:00</div>
+</div>
+<!-- Timeline Grid Lines -->
+<div class="col-start-2 row-start-1 row-span-full grid grid-cols-6 h-full">
+<div class="border-r border-dashed border-zinc-200 dark:border-zinc-700"></div>
+<div class="border-r border-dashed border-zinc-200 dark:border-zinc-700"></div>
+<div class="border-r border-dashed border-zinc-200 dark:border-zinc-700"></div>
+<div class="border-r border-dashed border-zinc-200 dark:border-zinc-700"></div>
+<div class="border-r border-dashed border-zinc-200 dark:border-zinc-700"></div>
+<div></div>
+</div>
+<!-- Resource Lanes -->
+<div class="col-start-1 row-start-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400 space-y-4 pr-2 text-right sticky left-0 bg-background-light dark:bg-background-dark">
+<div class="h-20 flex items-center justify-end">Stand A01</div>
+<div class="h-20 flex items-center justify-end">Stand A02</div>
+<div class="h-20 flex items-center justify-end">Stand B01</div>
+<div class="h-20 flex items-center justify-end">Stand B02</div>
+<div class="h-20 flex items-center justify-end">Stand B03</div>
+</div>
+<!-- Flight Cards Container -->
+<div class="col-start-2 row-start-2 space-y-4">
+<!-- Stand A01 Lane -->
+<div class="relative h-20">
+<div class="absolute h-full rounded-lg bg-zinc-200 dark:bg-zinc-800 p-2 text-zinc-900 dark:text-white flex flex-col justify-center cursor-pointer" style="left: 16.66%; width: 33.33%;">
+<div class="flex items-center justify-between text-xs font-bold">
+<span>AF123 - AFR</span>
+<span class="material-symbols-outlined text-green-400" style="font-size: 16px;">check_circle</span>
+</div>
+<div class="text-[10px] text-zinc-600 dark:text-zinc-300">A320</div>
+<div class="text-xs font-medium">09:00 - 11:00</div>
+</div>
+</div>
+<!-- Stand A02 Lane -->
+<div class="relative h-20">
+<div class="absolute h-full rounded-lg bg-zinc-200 dark:bg-zinc-800 p-2 text-zinc-900 dark:text-white flex flex-col justify-center cursor-pointer border-l-4 border-amber-400" style="left: 0%; width: 25%;">
+<div class="flex items-center justify-between text-xs font-bold">
+<span>LH987 - DLH</span>
+<span class="material-symbols-outlined text-amber-400" style="font-size: 16px;">pending</span>
+</div>
+<div class="text-[10px] text-zinc-600 dark:text-zinc-300">B747</div>
+<div class="text-xs font-medium">08:00 - 09:30</div>
+</div>
+<div class="absolute h-full rounded-lg bg-zinc-200 dark:bg-zinc-800 p-2 text-zinc-900 dark:text-white flex flex-col justify-center cursor-pointer" style="left: 50%; width: 41.66%;">
+<div class="flex items-center justify-between text-xs font-bold">
+<span>UA456 - UAL</span>
+<span class="material-symbols-outlined text-green-400" style="font-size: 16px;">check_circle</span>
+</div>
+<div class="text-[10px] text-zinc-600 dark:text-zinc-300">B777</div>
+<div class="text-xs font-medium">11:00 - 13:30</div>
+</div>
+</div>
+<!-- Stand B01 Lane -->
+<div class="relative h-20">
+<!-- Empty lane -->
+</div>
+<!-- Stand B02 Lane -->
+<div class="relative h-20">
+<div class="absolute h-full rounded-lg bg-zinc-200 dark:bg-zinc-800 p-2 text-zinc-900 dark:text-white flex flex-col justify-center cursor-pointer border-l-4 border-red-500" style="left: 8.33%; width: 33.33%;">
+<div class="flex items-center justify-between text-xs font-bold">
+<span>BA249 - BAW</span>
+<span class="material-symbols-outlined text-red-500" style="font-size: 16px;">error</span>
+</div>
+<div class="text-[10px] text-zinc-600 dark:text-zinc-300">A380</div>
+<div class="text-xs font-medium">08:30 - 10:30</div>
+</div>
+</div>
+<!-- Stand B03 Lane -->
+<div class="relative h-20">
+<!-- Empty lane -->
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Sheet/Modal Stub -->
+<div class="absolute bottom-0 left-0 w-full z-30" style="display: none;">
+<div class="flex h-full w-full flex-col justify-end items-stretch bg-black/40">
+<div class="flex flex-col items-stretch bg-background-light dark:bg-background-dark rounded-t-xl max-h-[85vh]">
+<button class="flex h-5 w-full items-center justify-center pt-3 pb-1 shrink-0"><div class="h-1 w-9 rounded-full bg-zinc-300 dark:bg-zinc-700"></div></button>
+<div class="p-4 overflow-y-auto">
+<!-- Modal content goes here -->
+<h2 class="text-lg font-bold text-zinc-900 dark:text-white mb-4">New Flight Assignment</h2>
+<!-- Form fields here -->
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

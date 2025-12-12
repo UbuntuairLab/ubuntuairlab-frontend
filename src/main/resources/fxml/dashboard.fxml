@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.aige.apronsmart.controllers.DashboardController"
+      prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+        <image>
+            <Image url="@../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay for better visibility -->
+    <Region styleClass="dashboard-overlay"/>
+    
+<VBox fx:id="mainContainer"
+      prefHeight="884.0" prefWidth="480.0"
+      spacing="0">
+    
+    <!-- Top App Bar -->
+    <HBox alignment="CENTER_LEFT" styleClass="app-bar" prefHeight="64.0">
+        <padding>
+            <Insets top="16" right="16" bottom="8" left="16"/>
+        </padding>
+        
+        <Label text="UbuntuAirLab" styleClass="app-title" HBox.hgrow="ALWAYS">
+            <font>
+                <Font name="Inter Bold" size="18"/>
+            </font>
+        </Label>
+        
+        <Label fx:id="timeLabel" text="14:30" styleClass="time-label">
+            <font>
+                <Font name="Inter Bold" size="16"/>
+            </font>
+        </Label>
+        
+        <Region prefWidth="16"/>
+        
+        <Button styleClass="icon-button" onAction="#handleLogout" minWidth="48" minHeight="48">
+            <graphic>
+                <Label text="⏻" styleClass="icon-label"/>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <!-- Main Content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="main-scroll">
+        <VBox spacing="16">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+            
+            <!-- Real-time Overview Section -->
+            <VBox spacing="12">
+                <Label text="Aperçu en Temps Réel" styleClass="section-title">
+                    <padding>
+                        <Insets top="8" bottom="12"/>
+                    </padding>
+                    <font>
+                        <Font name="Inter Bold" size="22"/>
+                    </font>
+                </Label>
+                
+                <HBox spacing="16">
+                    <VBox spacing="8" styleClass="stat-card-large" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+                        <Label text="Postes Occupés" styleClass="stat-label-large">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="occupiedPostesLabel" text="58 / 70" styleClass="stat-value-large">
+                            <font>
+                                <Font name="Inter Bold" size="24"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                    
+                    <VBox spacing="8" styleClass="stat-card-large" HBox.hgrow="ALWAYS">
+                        <padding>
+                            <Insets top="16" right="16" bottom="16" left="16"/>
+                        </padding>
+                        <Label text="Taux d'Utilisation" styleClass="stat-label-large">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                        <Label fx:id="utilizationRateLabel" text="83%" styleClass="stat-value-primary">
+                            <font>
+                                <Font name="Inter Bold" size="24"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </HBox>
+                
+                <VBox spacing="8" styleClass="stat-card-large">
+                    <padding>
+                        <Insets top="16" right="16" bottom="16" left="16"/>
+                    </padding>
+                    <Label text="Vols Prévus (2h)" styleClass="stat-label-large">
+                        <font>
+                            <Font name="Inter Medium" size="14"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="upcomingFlightsLabel" text="12" styleClass="stat-value-large">
+                        <font>
+                            <Font name="Inter Bold" size="24"/>
+                        </font>
+                    </Label>
+                </VBox>
+            </VBox>
+            
+            <!-- System Status Card -->
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="status-card">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="État du Système" styleClass="status-title">
+                        <font>
+                            <Font name="Inter Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Circle radius="6" styleClass="status-indicator-online"/>
+                        <Label fx:id="systemStatusLabel" text="Opérationnel" styleClass="status-text">
+                            <font>
+                                <Font name="Inter Medium" size="14"/>
+                            </font>
+                        </Label>
+                    </HBox>
+                </VBox>
+                
+                <Label text="🛡" styleClass="status-icon"/>
+            </HBox>
+            
+            <!-- Main Modules Section -->
+            <VBox spacing="12">
+                <Label text="Modules Principaux" styleClass="section-title">
+                    <padding>
+                        <Insets top="20" bottom="12"/>
+                    </padding>
+                    <font>
+                        <Font name="Inter Bold" size="22"/>
+                    </font>
+                </Label>
+                
+                <GridPane hgap="16" vgap="16" styleClass="modules-grid">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    </columnConstraints>
+                    
+                    <!-- Module: Radar Live -->
+                    <StackPane fx:id="radarButton" styleClass="module-card" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               onMouseClicked="#loadRadarModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="📡" styleClass="module-icon"/>
+                            <Label text="Radar Live" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Visualisation 3D -->
+                    <StackPane fx:id="visualization3dButton" styleClass="module-card" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                               onMouseClicked="#loadVisualization3dModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="🎲" styleClass="module-icon"/>
+                            <Label text="Visualisation 3D" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Gestion Postes -->
+                    <StackPane fx:id="postesButton" styleClass="module-card" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               onMouseClicked="#loadPostesModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="🅿" styleClass="module-icon"/>
+                            <Label text="Gestion Stationnement" styleClass="module-label" wrapText="true" textAlignment="CENTER" maxWidth="140">
+                                <font>
+                                    <Font name="Inter Bold" size="12"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Prédictions ML -->
+                    <StackPane fx:id="predictionsButton" styleClass="module-card" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                               onMouseClicked="#loadPredictionsModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="🤖" styleClass="module-icon"/>
+                            <Label text="Prédictions ML" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Planification -->
+                    <StackPane fx:id="planningButton" styleClass="module-card" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               onMouseClicked="#loadPlanningModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="📅" styleClass="module-icon"/>
+                            <Label text="Planification" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Alertes -->
+                    <StackPane fx:id="alertsButton" styleClass="module-card" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                               onMouseClicked="#loadAlertsModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <StackPane>
+                                <Label text="🔔" styleClass="module-icon"/>
+                                <!-- Badge -->
+                                <StackPane styleClass="notification-badge" StackPane.alignment="TOP_RIGHT" translateX="12" translateY="-8">
+                                    <Label fx:id="alertCountBadge" text="3" styleClass="badge-text">
+                                        <font>
+                                            <Font name="Inter Bold" size="11"/>
+                                        </font>
+                                    </Label>
+                                </StackPane>
+                            </StackPane>
+                            <Label text="Alertes" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Historique -->
+                    <StackPane fx:id="historyButton" styleClass="module-card" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                               onMouseClicked="#loadHistoryModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="⏱" styleClass="module-icon"/>
+                            <Label text="Historique" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                </GridPane>
+            </VBox>
+            
+            <!-- User Info -->
+            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="user-card">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="userNameLabel" text="Utilisateur" styleClass="user-name">
+                        <font>
+                            <Font name="Inter Bold" size="16"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="userRoleLabel" text="Rôle" styleClass="user-role">
+                        <font>
+                            <Font name="Inter" size="14"/>
+                        </font>
+                    </Label>
+                </VBox>
+                <Label text="👤" styleClass="user-avatar"/>
+            </HBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+</VBox>
+
+</StackPane>
