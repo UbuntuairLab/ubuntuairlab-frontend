@@ -211,7 +211,8 @@ public class Poste {
         OCCUPE("Occupé", "#F44336"),
         RESERVE("Réservé", "#FF9800"),
         MAINTENANCE("Maintenance", "#9E9E9E"),
-        MILITARY("Militaire", "#2196F3");
+        MILITARY("Militaire", "#2196F3"),
+        INDISPONIBLE("Indisponible", "#666666");
         
         private final String displayName;
         private final String colorHex;

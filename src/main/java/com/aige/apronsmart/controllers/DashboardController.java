@@ -162,6 +162,11 @@ public class DashboardController {
     }
     
     @FXML
+    private void loadFlightsModule(MouseEvent event) {
+        loadModule("/fxml/modules/flights.fxml", "Vols");
+    }
+    
+    @FXML
     private void loadPredictionsModule(MouseEvent event) {
         loadModule("/fxml/modules/predictions.fxml", "Prédictions ML");
     }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.aige.apronsmart.controllers.modules.FlightsController"
+           prefHeight="884.0" prefWidth="480.0" styleClass="root">
+    
+    <!-- Background Image -->
+    <ImageView fx:id="backgroundImageView" preserveRatio="true" pickOnBounds="true">
+        <image>
+            <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
+        </image>
+    </ImageView>
+    
+    <!-- Dark Overlay -->
+    <Region styleClass="dashboard-overlay"/>
+    
+    <VBox prefHeight="884.0" prefWidth="480.0" spacing="0">
+        
+        <!-- Top App Bar -->
+        <HBox alignment="CENTER" styleClass="app-bar" prefHeight="64.0">
+            <padding>
+                <Insets top="16" right="16" bottom="8" left="16"/>
+            </padding>
+            
+            <Button fx:id="backButton" styleClass="icon-button" onAction="#handleBack" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <font>
+                    <Font size="20"/>
+                </font>
+                <graphic>
+                    <Label text="←" style="-fx-text-fill: white; -fx-font-size: 24px;"/>
+                </graphic>
+            </Button>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label text="Vols" styleClass="page-title">
+                <font>
+                    <Font name="Inter Bold" size="20"/>
+                </font>
+            </Label>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Button fx:id="refreshButton" styleClass="icon-button" onAction="#handleRefresh" minWidth="48" minHeight="48" maxWidth="48" maxHeight="48">
+                <graphic>
+                    <Label text="⟳" style="-fx-text-fill: white; -fx-font-size: 24px;"/>
+                </graphic>
+            </Button>
+        </HBox>
+        
+        <!-- Filter Bar -->
+        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="filter-bar">
+            <padding>
+                <Insets top="12" right="16" bottom="12" left="16"/>
+            </padding>
+            
+            <Button fx:id="allFilterButton" text="Tous" styleClass="filter-button,filter-button-active" onAction="#handleFilterAll" prefHeight="36">
+                <font>
+                    <Font name="Inter Medium" size="13"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="arrivalFilterButton" text="Arrivées" styleClass="filter-button" onAction="#handleFilterArrival" prefHeight="36">
+                <font>
+                    <Font name="Inter Medium" size="13"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="departureFilterButton" text="Départs" styleClass="filter-button" onAction="#handleFilterDeparture" prefHeight="36">
+                <font>
+                    <Font name="Inter Medium" size="13"/>
+                </font>
+            </Button>
+            
+            <Button fx:id="activeFilterButton" text="Actifs" styleClass="filter-button" onAction="#handleFilterActive" prefHeight="36">
+                <font>
+                    <Font name="Inter Medium" size="13"/>
+                </font>
+            </Button>
+        </HBox>
+        
+        <!-- Stats Bar -->
+        <HBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(26, 38, 50, 0.6); -fx-padding: 12 16;">
+            <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="totalFlightsLabel" text="0" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Total" style="-fx-text-fill: #93adc8; -fx-font-size: 11px;"/>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="arrivalsLabel" text="0" style="-fx-text-fill: #22c55e; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Arrivées" style="-fx-text-fill: #93adc8; -fx-font-size: 11px;"/>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="departuresLabel" text="0" style="-fx-text-fill: #3b82f6; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Départs" style="-fx-text-fill: #93adc8; -fx-font-size: 11px;"/>
+            </VBox>
+            
+            <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS">
+                <Label fx:id="activeLabel" text="0" style="-fx-text-fill: #f97316; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label text="Actifs" style="-fx-text-fill: #93adc8; -fx-font-size: 11px;"/>
+            </VBox>
+        </HBox>
+        
+        <!-- Content Area -->
+        <ScrollPane fitToWidth="true" styleClass="content-scroll" VBox.vgrow="ALWAYS">
+            <VBox fx:id="flightsContainer" spacing="8">
+                <padding>
+                    <Insets top="16" right="16" bottom="16" left="16"/>
+                </padding>
+            </VBox>
+        </ScrollPane>
+        
+    </VBox>
+    
+</StackPane>

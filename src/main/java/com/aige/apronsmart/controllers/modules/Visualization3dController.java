@@ -74,7 +74,8 @@ public class Visualization3dController {
             for (int i = 0; i < parkingSpots.size(); i++) {
                 ParkingSpot spot = parkingSpots.get(i);
                 String status = spot.getStatus() != null ? spot.getStatus().toLowerCase() : "libre";
-                String spotId = spot.getSpotNumber() != null ? spot.getSpotNumber() : String.valueOf(spot.getId());
+                String spotId = spot.getSpotId() != null ? spot.getSpotId() : 
+                               (spot.getSpotNumber() != null ? String.valueOf(spot.getSpotNumber()) : "unknown");
                 js.append(String.format("{id:'%s',status:'%s'}", spotId, status));
                 if (i < parkingSpots.size() - 1) js.append(",");
             }

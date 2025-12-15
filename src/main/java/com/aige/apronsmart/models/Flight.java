@@ -29,6 +29,9 @@ public class Flight {
     private Double altitude;
     private Double heading;
     private Double speed;
+    private Double velocity; // Speed in m/s from API
+    private Boolean onGround; // true = on ground, false = in flight
+    private String lastPositionUpdate; // ISO 8601 timestamp of last position update
     
     private Integer passengers;
     private Double cargoWeight;
@@ -100,6 +103,21 @@ public class Flight {
     
     public Double getSpeed() { return speed; }
     public void setSpeed(Double speed) { this.speed = speed; }
+    
+    public Double getVelocity() { return velocity; }
+    public void setVelocity(Double velocity) { 
+        this.velocity = velocity;
+        // Auto-update speed field for backward compatibility (velocity is in m/s)
+        if (velocity != null) {
+            this.speed = velocity;
+        }
+    }
+    
+    public Boolean getOnGround() { return onGround; }
+    public void setOnGround(Boolean onGround) { this.onGround = onGround; }
+    
+    public String getLastPositionUpdate() { return lastPositionUpdate; }
+    public void setLastPositionUpdate(String lastPositionUpdate) { this.lastPositionUpdate = lastPositionUpdate; }
     
     public Integer getPassengers() { return passengers; }
     public void setPassengers(Integer passengers) { this.passengers = passengers; }

@@ -110,14 +110,15 @@ public class PredictionsController {
         refreshButton.setDisable(true);
         new Thread(() -> {
             try {
-                List<Flight> flights = flightService.getActiveFlights();
+                // Load all flights (not just active ones)
+                List<Flight> flights = flightService.getAllFlights().getFlights();
                 
                 Platform.runLater(() -> {
                     flightComboBox.setItems(FXCollections.observableArrayList(flights));
                     if (!flights.isEmpty()) {
-                        showInfo("Vols chargés", flights.size() + " vols actifs trouvés");
+                        showInfo("Vols chargés", flights.size() + " vol(s) trouvé(s)");
                     } else {
-                        showWarning("Vols chargés", "Aucun vol actif trouvé");
+                        showWarning("Vols chargés", "Aucun vol trouvé");
                     }
                 });
             } catch (IOException e) {

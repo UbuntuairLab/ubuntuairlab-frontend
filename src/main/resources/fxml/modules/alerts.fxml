@@ -12,7 +12,7 @@
       prefHeight="884.0" prefWidth="480.0" styleClass="root">
     
     <!-- Background Image -->
-    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+    <ImageView fx:id="backgroundImageView" preserveRatio="true" pickOnBounds="true">
         <image>
             <Image url="@../../images/aeroport1.jpg" backgroundLoading="true"/>
         </image>

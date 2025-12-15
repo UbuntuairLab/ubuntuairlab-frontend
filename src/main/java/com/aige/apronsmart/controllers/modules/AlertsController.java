@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class AlertsController {
     private static final Logger logger = LoggerFactory.getLogger(AlertsController.class);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     
+    @FXML private ImageView backgroundImageView;
     @FXML private VBox alertsContainer;
     @FXML private Button typeFilterButton;
     @FXML private Button statusFilterButton;
@@ -38,6 +40,14 @@ public class AlertsController {
     
     @FXML
     public void initialize() {
+        // Bind background image to fill the entire screen
+        if (backgroundImageView != null && backgroundImageView.getParent() instanceof StackPane) {
+            StackPane parent = (StackPane) backgroundImageView.getParent();
+            backgroundImageView.fitWidthProperty().bind(parent.widthProperty());
+            backgroundImageView.fitHeightProperty().bind(parent.heightProperty());
+            backgroundImageView.setPreserveRatio(false);
+        }
+        
         loadAlerts();
     }
     

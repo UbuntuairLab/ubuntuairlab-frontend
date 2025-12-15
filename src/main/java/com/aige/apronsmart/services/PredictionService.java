@@ -90,7 +90,8 @@ public class PredictionService extends BaseApiService {
      */
     public Map<String, Object> batchPredict(java.util.List<Map<String, Object>> flightDataList) throws IOException {
         logger.info("Making batch ML predictions for {} flights", flightDataList.size());
-        String jsonBody = objectMapper.writeValueAsString(Map.of("flights", flightDataList));
+        // API expects direct array, not wrapped in "flights" object
+        String jsonBody = objectMapper.writeValueAsString(flightDataList);
         okhttp3.RequestBody body = okhttp3.RequestBody.create(jsonBody, JSON);
         
         okhttp3.Request request = buildRequest("/predictions/predict/batch")

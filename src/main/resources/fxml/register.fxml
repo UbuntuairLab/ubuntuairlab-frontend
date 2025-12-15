@@ -8,11 +8,8 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.aige.apronsmart.controllers.RegisterController"
-            styleClass="login-container">
-    
-    <stylesheets>
-        <URL value="@../css/main.css"/>
-    </stylesheets>
+            styleClass="login-container"
+            stylesheets="@../css/main.css">
     
     <center>
         <VBox alignment="CENTER" spacing="25" styleClass="login-box">

@@ -13,7 +13,7 @@
       prefHeight="884.0" prefWidth="480.0" styleClass="root">
     
     <!-- Background Image -->
-    <ImageView fx:id="backgroundImageView" preserveRatio="false" pickOnBounds="true">
+    <ImageView fx:id="backgroundImageView" preserveRatio="true" pickOnBounds="true">
         <image>
             <Image url="@../images/aeroport1.jpg" backgroundLoading="true"/>
         </image>
@@ -279,6 +279,22 @@
                             </padding>
                             <Label text="⏱" styleClass="module-icon"/>
                             <Label text="Historique" styleClass="module-label">
+                                <font>
+                                    <Font name="Inter Bold" size="14"/>
+                                </font>
+                            </Label>
+                        </VBox>
+                    </StackPane>
+                    
+                    <!-- Module: Vols -->
+                    <StackPane fx:id="flightsButton" styleClass="module-card" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                               onMouseClicked="#loadFlightsModule">
+                        <VBox alignment="CENTER" spacing="12">
+                            <padding>
+                                <Insets top="24" right="24" bottom="24" left="24"/>
+                            </padding>
+                            <Label text="✈️" styleClass="module-icon"/>
+                            <Label text="Vols" styleClass="module-label">
                                 <font>
                                     <Font name="Inter Bold" size="14"/>
                                 </font>

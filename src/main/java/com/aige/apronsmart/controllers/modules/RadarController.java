@@ -389,6 +389,14 @@ public class RadarController {
                 try {
                     localFlights = flightService.getActiveFlights();
                     logger.info("Loaded {} flights from local API", localFlights.size());
+                    
+                    // Log what we received from API
+                    for (Flight f : localFlights) {
+                        logger.info("API Flight: {} - ICAO24: {}, Status: {}, Origin: {}, Dest: {}, Lat: {}, Lon: {}",
+                            f.getCallsign(), f.getIcao24(), f.getStatus(),
+                            f.getOrigin(), f.getDestination(),
+                            f.getLatitude(), f.getLongitude());
+                    }
                 } catch (IOException e) {
                     logger.warn("Could not load from local API: {}", e.getMessage());
                 }
@@ -403,6 +411,7 @@ public class RadarController {
                 }
                 
                 // 3. Merge data: Update local flights with OpenSky GPS data
+                int updatedCount = 0;
                 for (Flight localFlight : localFlights) {
                     for (Map<String, Object> openSkyFlight : openSkyFlights) {
                         String openSkyIcao = (String) openSkyFlight.get("icao24");
@@ -413,10 +422,19 @@ public class RadarController {
                             localFlight.setAltitude((Double) openSkyFlight.get("altitude"));
                             localFlight.setHeading((Double) openSkyFlight.get("heading"));
                             localFlight.setSpeed((Double) openSkyFlight.get("speed"));
-                            logger.info("✓ Updated {} with OpenSky GPS data", localFlight.getCallsign());
+                            updatedCount++;
+                            logger.info("✓ Updated {} with OpenSky GPS data: lat={}, lon={}",
+                                localFlight.getCallsign(),
+                                localFlight.getLatitude(),
+                                localFlight.getLongitude());
                             break;
                         }
                     }
+                }
+                
+                if (updatedCount == 0 && !localFlights.isEmpty()) {
+                    logger.info("ℹ No GPS coordinates from OpenSky - API flights don't have real-time position data");
+                    logger.info("ℹ Displaying API flight data: callsign, status, origin/destination, airports");
                 }
                 
                 // 4. Add OpenSky-only flights (not in local DB)
@@ -449,18 +467,20 @@ public class RadarController {
                 }
                 
                 final List<Flight> mergedFlights = localFlights;
-                logger.info("Total flights after merge: {}", mergedFlights.size());
+                final boolean hasGpsData = mergedFlights.stream().anyMatch(f -> f.getLatitude() != null && f.getLatitude() != 0);
+                logger.info("Total flights: {} (with GPS data: {})", mergedFlights.size(), hasGpsData);
                 
                 Platform.runLater(() -> {
                     flightsList.clear();
                     flightsList.addAll(mergedFlights);
                     if (flightCountLabel != null) {
                         String timestamp = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
-                        flightCountLabel.setText(mergedFlights.size() + " vol(s) • " + timestamp);
+                        String gpsInfo = hasGpsData ? "avec GPS" : "données API";
+                        flightCountLabel.setText(mergedFlights.size() + " vol(s) • " + gpsInfo + " • " + timestamp);
                     }
                     displayFlightsList(mergedFlights);
                     updateMapFlights(mergedFlights);
-                    logger.info("✓ Map updated with {} flights (real GPS data)", mergedFlights.size());
+                    logger.info("✓ Radar updated with {} flights", mergedFlights.size());
                 });
             } catch (Exception e) {
                 logger.error("Error loading flights: {}", e.getMessage(), e);
@@ -501,12 +521,172 @@ public class RadarController {
         if (flightsListContainer == null) return;
         flightsListContainer.getChildren().clear();
         
-        for (Flight flight : flights) {
-            String statusColor = getStatusColor(flight.getStatus());
-            String eta = flight.getEta() != null ? flight.getEta().format(TIME_FORMATTER) : "--:--";
-            addFlightItem(flight.getCallsign(), flight.getStatus().getDisplayName(), 
-                         flight.getAircraftType(), eta, statusColor);
+        if (flights.isEmpty()) {
+            Label emptyLabel = new Label("Aucun vol actif");
+            emptyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #8892a0; -fx-padding: 20;");
+            flightsListContainer.getChildren().add(emptyLabel);
+            return;
         }
+        
+        for (Flight flight : flights) {
+            VBox flightCard = createFlightCard(flight);
+            flightsListContainer.getChildren().add(flightCard);
+        }
+    }
+    
+    private VBox createFlightCard(Flight flight) {
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(12, 16, 12, 16));
+        card.setStyle("-fx-background-color: #1a2632; -fx-background-radius: 8; -fx-border-color: #2d3e50; -fx-border-radius: 8;");
+        
+        // Header: Callsign and Status
+        HBox header = new HBox(10);
+        header.setAlignment(Pos.CENTER_LEFT);
+        
+        Label callsignLabel = new Label(flight.getCallsign() != null ? flight.getCallsign() : "N/A");
+        callsignLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+        HBox.setHgrow(callsignLabel, Priority.ALWAYS);
+        
+        String statusColor = getStatusColor(flight.getStatus());
+        Label statusBadge = new Label(flight.getStatus() != null ? flight.getStatus().getDisplayName() : "Inconnu");
+        statusBadge.setStyle("-fx-background-color: " + statusColor + "; -fx-text-fill: white; -fx-padding: 4 8; -fx-background-radius: 4; -fx-font-size: 11px;");
+        
+        header.getChildren().addAll(callsignLabel, statusBadge);
+        
+        // Flight info grid
+        VBox infoBox = new VBox(4);
+        
+        // ICAO24
+        if (flight.getIcao24() != null) {
+            Label icaoLabel = new Label("ICAO24: " + flight.getIcao24());
+            icaoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #8892a0;");
+            infoBox.getChildren().add(icaoLabel);
+        }
+        
+        // Origin and Destination
+        HBox routeBox = new HBox(8);
+        routeBox.setAlignment(Pos.CENTER_LEFT);
+        
+        String origin = flight.getOrigin() != null ? flight.getOrigin() : "N/A";
+        String destination = flight.getDestination() != null ? flight.getDestination() : "N/A";
+        
+        Label routeLabel = new Label("✈️  " + origin + " → " + destination);
+        routeLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #4A90E2; -fx-font-weight: bold;");
+        routeBox.getChildren().add(routeLabel);
+        infoBox.getChildren().add(routeBox);
+        
+        // GPS Data and Tracking Information
+        if (flight.getLatitude() != null && flight.getLongitude() != null && 
+            flight.getLatitude() != 0 && flight.getLongitude() != 0) {
+            
+            // Position
+            Label gpsLabel = new Label(String.format("📍 Lat: %.4f, Lon: %.4f", flight.getLatitude(), flight.getLongitude()));
+            gpsLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #4CAF50;");
+            infoBox.getChildren().add(gpsLabel);
+            
+            // Status: On Ground / In Flight
+            if (flight.getOnGround() != null) {
+                String statusIcon = flight.getOnGround() ? "🛬" : "🛫";
+                String statusText = flight.getOnGround() ? "Au sol" : "En vol";
+                Label groundLabel = new Label(statusIcon + " " + statusText);
+                groundLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: " + (flight.getOnGround() ? "#FF9800" : "#4CAF50") + ";");
+                infoBox.getChildren().add(groundLabel);
+            }
+            
+            // Altitude
+            if (flight.getAltitude() != null && flight.getAltitude() > 0) {
+                int altitudeFt = (int)(flight.getAltitude() * 3.28084); // meters to feet
+                Label altLabel = new Label(String.format("📏 Altitude: %,d ft (%,d m)", altitudeFt, flight.getAltitude().intValue()));
+                altLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #8892a0;");
+                infoBox.getChildren().add(altLabel);
+            }
+            
+            // Velocity/Speed
+            if (flight.getVelocity() != null && flight.getVelocity() > 0) {
+                double speedKmh = flight.getVelocity() * 3.6; // m/s to km/h
+                double speedKnots = flight.getVelocity() * 1.94384; // m/s to knots
+                Label speedLabel = new Label(String.format("⚡ Vitesse: %.0f km/h (%.0f kts)", speedKmh, speedKnots));
+                speedLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #8892a0;");
+                infoBox.getChildren().add(speedLabel);
+            }
+            
+            // Heading
+            if (flight.getHeading() != null && flight.getHeading() >= 0) {
+                String direction = getCardinalDirection(flight.getHeading());
+                Label headingLabel = new Label(String.format("🧭 Cap: %.0f° (%s)", flight.getHeading(), direction));
+                headingLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #8892a0;");
+                infoBox.getChildren().add(headingLabel);
+            }
+            
+            // Last Position Update (freshness indicator)
+            if (flight.getLastPositionUpdate() != null) {
+                try {
+                    java.time.Instant updateTime = java.time.Instant.parse(flight.getLastPositionUpdate());
+                    java.time.Instant now = java.time.Instant.now();
+                    long minutesAgo = java.time.Duration.between(updateTime, now).toMinutes();
+                    
+                    String freshnessIcon = minutesAgo < 5 ? "🛰️" : "⏱️";
+                    String freshnessText = minutesAgo < 5 ? "Temps réel" : String.format("il y a %d min", minutesAgo);
+                    String freshnessColor = minutesAgo < 5 ? "#4CAF50" : "#FF9800";
+                    
+                    Label updateLabel = new Label(String.format("%s Mis à jour: %s", freshnessIcon, freshnessText));
+                    updateLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: " + freshnessColor + "; -fx-font-style: italic;");
+                    infoBox.getChildren().add(updateLabel);
+                } catch (Exception e) {
+                    logger.debug("Could not parse lastPositionUpdate: {}", e.getMessage());
+                }
+            }
+        } else {
+            Label noGpsLabel = new Label("📍 Données GPS non disponibles (vol hors zone 60km)");
+            noGpsLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #666; -fx-font-style: italic;");
+            infoBox.getChildren().add(noGpsLabel);
+        }
+        
+        // ETA/ETD
+        if (flight.getEta() != null) {
+            Label etaLabel = new Label("ETA: " + flight.getEta().format(TIME_FORMATTER));
+            etaLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #8892a0;");
+            infoBox.getChildren().add(etaLabel);
+        }
+        if (flight.getEtd() != null) {
+            Label etdLabel = new Label("ETD: " + flight.getEtd().format(TIME_FORMATTER));
+            etdLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #8892a0;");
+            infoBox.getChildren().add(etdLabel);
+        }
+        
+        card.getChildren().addAll(header, infoBox);
+        
+        // Click handler
+        card.setOnMouseClicked(e -> {
+            if (flight.getLatitude() != null && flight.getLongitude() != null && 
+                flight.getLatitude() != 0 && flight.getLongitude() != 0) {
+                // Focus on map if GPS available
+                String jsCode = String.format("focusFlight(%f, %f);", flight.getLatitude(), flight.getLongitude());
+                if (webEngine != null) {
+                    try {
+                        webEngine.executeScript(jsCode);
+                    } catch (Exception ex) {
+                        logger.debug("Could not focus flight on map: {}", ex.getMessage());
+                    }
+                }
+            }
+            // Show bottom sheet with details
+            showBottomSheet(
+                flight.getCallsign(),
+                flight.getAircraftType() != null ? flight.getAircraftType() : "N/A",
+                flight.getStatus() != null ? flight.getStatus().getDisplayName() : "Inconnu",
+                origin,
+                destination,
+                flight.getEta() != null ? flight.getEta().format(TIME_FORMATTER) : "--:--",
+                flight.getAssignedPosteCode() != null ? flight.getAssignedPosteCode() : "Non assigné",
+                flight.getAltitude() != null ? flight.getAltitude().intValue() : 0
+            );
+        });
+        
+        card.setOnMouseEntered(e -> card.setStyle("-fx-background-color: #253545; -fx-background-radius: 8; -fx-border-color: #4A90E2; -fx-border-radius: 8; -fx-cursor: hand;"));
+        card.setOnMouseExited(e -> card.setStyle("-fx-background-color: #1a2632; -fx-background-radius: 8; -fx-border-color: #2d3e50; -fx-border-radius: 8;"));
+        
+        return card;
     }
     
     private void addFlightItem(String callsign, String status, String type, String eta, String color) {
@@ -740,6 +920,16 @@ public class RadarController {
                   .replace("\r", "\\r");
     }
     
+    /**
+     * Convert heading in degrees to cardinal direction
+     * 0° = North, 90° = East, 180° = South, 270° = West
+     */
+    private String getCardinalDirection(double heading) {
+        String[] directions = {"N", "NE", "E", "SE", "S", "SO", "O", "NO"};
+        int index = (int)Math.round(((heading % 360) / 45.0)) % 8;
+        return directions[index];
+    }
+    
     @FXML
     private void handleSettings() {
         // Create settings dialog
@@ -855,7 +1045,7 @@ public class RadarController {
                             "🔄 État : %s\n" +
                             "⏰ Intervalle : %d minutes\n" +
                             "🕐 Dernière sync : %s",
-                            isRunning ? "En cours" : "Arrêté",
+                            isRunning != null && isRunning ? "En cours" : "Arrêté",
                             interval != null ? interval : 10,
                             lastSync != null ? lastSync : "Jamais"
                         );

@@ -12,7 +12,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,8 @@ public class HistoryController {
     
     private static final Logger logger = LoggerFactory.getLogger(HistoryController.class);
     
-    @FXML private BorderPane historyContainer;
+    @FXML private ImageView backgroundImageView;
+    @FXML private VBox historyContainer;
     @FXML private DatePicker startDatePicker;
     @FXML private DatePicker endDatePicker;
     @FXML private TextField searchField;
@@ -48,6 +52,14 @@ public class HistoryController {
     
     @FXML
     public void initialize() {
+        // Bind background image to fill the entire screen
+        if (backgroundImageView != null && backgroundImageView.getParent() instanceof StackPane) {
+            StackPane parent = (StackPane) backgroundImageView.getParent();
+            backgroundImageView.fitWidthProperty().bind(parent.widthProperty());
+            backgroundImageView.fitHeightProperty().bind(parent.heightProperty());
+            backgroundImageView.setPreserveRatio(false);
+        }
+        
         setupControls();
         setupTable();
         loadInitialData();

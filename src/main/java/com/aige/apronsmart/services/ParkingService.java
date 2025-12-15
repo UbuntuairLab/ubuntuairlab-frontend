@@ -3,15 +3,31 @@ package com.aige.apronsmart.services;
 import com.aige.apronsmart.models.ParkingAllocation;
 import com.aige.apronsmart.models.ParkingAvailability;
 import com.aige.apronsmart.models.ParkingSpot;
+import com.aige.apronsmart.models.ParkingSpotsResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Service for parking management operations with UbuntuAirLab API
+ * 
+ * API Integration Notes:
+ * - Base URL: https://air-lab.bestwebapp.tech/api/v1
+ * - Authentication: Bearer token required
+ * - Parking assignment uses AUTOMATIC allocation algorithm (no manual spot selection)
+ * - API intelligently selects best available spot based on flight data
+ * 
+ * Key Endpoints:
+ * - GET /parking/spots - Returns direct array of parking spots
+ * - POST /parking/assign - Auto-allocates parking (requires icao24 only)
+ * - GET /parking/availability - Real-time availability stats
+ * 
+ * @see <a href="https://air-lab.bestwebapp.tech/docs">API Documentation</a>
  */
 public class ParkingService extends BaseApiService {
     
@@ -32,10 +48,41 @@ public class ParkingService extends BaseApiService {
      */
     public List<ParkingSpot> getAllParkingSpots() throws IOException {
         logger.info("Fetching all parking spots");
-        String responseStr = httpClient.newCall(
+        okhttp3.Response response = httpClient.newCall(
                 buildRequest("/parking/spots").get().build()
-        ).execute().body().string();
-        return objectMapper.readValue(responseStr, new TypeReference<List<ParkingSpot>>() {});
+        ).execute();
+        
+        String responseStr = response.body().string();
+        logger.debug("Parking spots API response ({}): {}", response.code(), 
+                     responseStr.substring(0, Math.min(200, responseStr.length())));
+        
+        if (!response.isSuccessful()) {
+            logger.error("Failed to fetch parking spots: HTTP {}", response.code());
+            throw new IOException("Failed to fetch parking spots: HTTP " + response.code());
+        }
+        
+        // API returns direct array: [{"spot_id": "C12", ...}, ...]
+        try {
+            JsonNode rootNode = objectMapper.readTree(responseStr);
+            
+            // Primary format: direct array
+            if (rootNode.isArray()) {
+                return objectMapper.readValue(responseStr, new TypeReference<List<ParkingSpot>>() {});
+            }
+            
+            // Fallback: check for wrapped responses (future-proofing)
+            if (rootNode.has("data") || rootNode.has("spots")) {
+                JsonNode dataNode = rootNode.has("data") ? rootNode.get("data") : rootNode.get("spots");
+                return objectMapper.convertValue(dataNode, new TypeReference<List<ParkingSpot>>() {});
+            }
+            
+            logger.error("Unexpected response format: {}", responseStr.substring(0, 100));
+            throw new IOException("Unexpected response format from parking spots API");
+            
+        } catch (Exception e) {
+            logger.error("Failed to parse parking spots response: {}", e.getMessage());
+            throw new IOException("Invalid response format from parking spots API: " + e.getMessage(), e);
+        }
     }
     
     /**
@@ -94,27 +141,72 @@ public class ParkingService extends BaseApiService {
     }
     
     /**
-     * Assign a specific parking spot to a flight
+     * Automatically allocate a parking spot to a flight
+     * API uses intelligent allocation algorithm
      * @param icao24 Flight ICAO24 identifier
-     * @param spotNumber Parking spot number
-     * @return Assignment result
+     * @return Assignment result with allocated spot
      */
-    public Map<String, Object> assignParking(String icao24, String spotNumber) throws IOException {
-        logger.info("Assigning parking spot {} to flight: {}", spotNumber, icao24);
-        Map<String, String> requestData = new HashMap<>();
-        requestData.put("icao24", icao24);
-        requestData.put("spot_number", spotNumber);
+    public Map<String, Object> assignParking(String icao24) throws IOException {
+        return assignParking(icao24, false);
+    }
+    
+    /**
+     * Automatically allocate a parking spot to a flight
+     * @param icao24 Flight ICAO24 identifier
+     * @param manualOverride Force allocation even if conflicts exist
+     * @return Assignment result with allocated spot
+     */
+    public Map<String, Object> assignParking(String icao24, boolean manualOverride) throws IOException {
+        logger.info("Auto-allocating parking for flight: {} (override: {})", icao24, manualOverride);
         
-        String responseStr = httpClient.newCall(
+        Map<String, Object> requestData = new HashMap<>();
+        requestData.put("icao24", icao24);
+        if (manualOverride) {
+            requestData.put("manual_override", true);
+        }
+        
+        okhttp3.Response response = httpClient.newCall(
                 buildRequest("/parking/assign")
                     .post(okhttp3.RequestBody.create(
                         objectMapper.writeValueAsString(requestData), 
                         JSON
                     ))
                     .build()
-        ).execute().body().string();
+        ).execute();
         
-        return objectMapper.readValue(responseStr, new TypeReference<Map<String, Object>>() {});
+        String responseStr = response.body().string();
+        logger.debug("Assignment response ({}): {}", response.code(), responseStr);
+        
+        // Handle error responses
+        if (!response.isSuccessful()) {
+            Map<String, Object> errorResult = new HashMap<>();
+            errorResult.put("success", false);
+            errorResult.put("status_code", response.code());
+            
+            // Try to parse as JSON (API returns {"detail": "error message"})
+            try {
+                Map<String, Object> errorData = objectMapper.readValue(responseStr, new TypeReference<Map<String, Object>>() {});
+                errorResult.put("detail", errorData.getOrDefault("detail", "Unknown error"));
+                return errorResult;
+            } catch (Exception e) {
+                // Plain text error response
+                errorResult.put("detail", responseStr.isEmpty() ? "Unknown error" : responseStr);
+                return errorResult;
+            }
+        }
+        
+        // Parse successful response: {"success": true, "spot_id": "C12", ...}
+        try {
+            Map<String, Object> result = objectMapper.readValue(responseStr, new TypeReference<Map<String, Object>>() {});
+            result.put("success", true);
+            return result;
+        } catch (Exception e) {
+            logger.error("Failed to parse assignment response: {}", e.getMessage());
+            Map<String, Object> errorResult = new HashMap<>();
+            errorResult.put("success", false);
+            errorResult.put("detail", "Invalid response format: " + responseStr);
+            return errorResult;
+        }
     }
     
     /**

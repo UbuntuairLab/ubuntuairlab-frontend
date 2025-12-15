@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class PostesController {
     
     private static final Logger logger = LoggerFactory.getLogger(PostesController.class);
     
+    @FXML private ImageView backgroundImageView;
     @FXML private GridPane postesGrid;
     @FXML private Label totalPostesLabel;
     @FXML private Label freePostesLabel;
@@ -42,6 +44,14 @@ public class PostesController {
     
     @FXML
     public void initialize() {
+        // Bind background image to fill the entire screen
+        if (backgroundImageView != null && backgroundImageView.getParent() instanceof StackPane) {
+            StackPane parent = (StackPane) backgroundImageView.getParent();
+            backgroundImageView.fitWidthProperty().bind(parent.widthProperty());
+            backgroundImageView.fitHeightProperty().bind(parent.heightProperty());
+            backgroundImageView.setPreserveRatio(false);
+        }
+        
         setupSearch();
         loadPostes();
     }
@@ -100,6 +110,15 @@ public class PostesController {
     }
     
     @FXML
+    private void handleFilterIndisponible() {
+        currentFilter = "indisponible";
+        List<Poste> filtered = postesList.stream()
+            .filter(p -> p.getStatus() == Poste.PosteStatus.INDISPONIBLE)
+            .toList();
+        displayPostes(filtered);
+    }
+    
+    @FXML
     private void handleRefresh() {
         loadPostes();
     }
@@ -137,14 +156,19 @@ public class PostesController {
         
         switch (action) {
             case "assign":
-                dialog.setHeaderText("💡 Conseil: Vérifiez les vols disponibles dans le module 'Radar Live' d'abord");
-                dialog.setContentText("Entrez l'ICAO24 du vol et le code du poste (format: ICAO24,CODE):\nExemple: 3c6444,P2");
+                dialog.setHeaderText("🤖 Allocation Automatique de Parking");
+                dialog.setContentText("Entrez l'ICAO24 du vol pour allocation automatique:\n" +
+                        "L'algorithme sélectionnera le meilleur poste disponible.\n\n" +
+                        "💡 Vérifiez les vols dans 'Radar Live' d'abord\n" +
+                        "Exemple: 3c6444");
                 dialog.showAndWait().ifPresent(input -> {
-                    String[] parts = input.split(",");
-                    if (parts.length == 2) {
-                        assignFlightToSpot(parts[0].trim(), parts[1].trim());
+                    // Clean input: remove parentheses, spaces, etc.
+                    String icao24 = input.replaceAll("[()\\s,]+", "").trim();
+                    if (!icao24.isEmpty() && icao24.length() >= 6) {
+                        logger.debug("Requesting auto-allocation for ICAO24: '{}'", icao24);
+                        assignFlightToSpot(icao24, null); // spotCode not used anymore
                     } else {
-                        showError("Format invalide", "Format attendu: ICAO24,CODE");
+                        showError("Format invalide", "Format attendu: ICAO24 (6+ caractères)\nExemple: 3c6444");
                     }
                 });
                 break;
@@ -162,41 +186,43 @@ public class PostesController {
     }
     
     private void assignFlightToSpot(String icao24, String spotCode) {
-        // Convert our hardcoded spot code to API numeric code if needed
-        java.util.Map<String, String> codeToApiNumber = new java.util.HashMap<>();
-        codeToApiNumber.put("P1", "1");
-        codeToApiNumber.put("P2", "2");
-        codeToApiNumber.put("P4", "4");
-        codeToApiNumber.put("S1", "5");
-        
-        final String apiSpotCode = codeToApiNumber.getOrDefault(spotCode, spotCode);
-        if (!apiSpotCode.equals(spotCode)) {
-            logger.info("Converting spot code {} to API number {}", spotCode, apiSpotCode);
-        }
+        logger.info("Requesting automatic parking allocation for flight: {}", icao24);
         
         new Thread(() -> {
             try {
                 com.aige.apronsmart.services.ParkingService parkingService = 
                     com.aige.apronsmart.services.ParkingService.getInstance();
                 
-                java.util.Map<String, Object> response = parkingService.assignParking(icao24, apiSpotCode);
-                logger.info("Assignment response: {}", response);
+                // API uses automatic allocation - no manual spot selection
+                java.util.Map<String, Object> response = parkingService.assignParking(icao24);
+                logger.info("Auto-allocation response: {}", response);
                 
                 // Check for error responses
-                if (response != null && response.containsKey("detail")) {
-                    String detail = response.get("detail").toString();
+                if (response != null && !Boolean.TRUE.equals(response.get("success"))) {
+                    String detail = response.getOrDefault("detail", "Unknown error").toString();
                     javafx.application.Platform.runLater(() -> 
-                        showError("Erreur API", 
+                        showError("Erreur d'allocation automatique", 
                             "L'API a retourné une erreur:\n" + detail + 
-                            "\n\n💡 Astuce: Vérifiez que le vol existe dans le module 'Radar Live'"));
+                            "\n\n💡 Astuce: Vérifiez que le vol existe dans le module 'Radar Live' et qu'il n'a pas déjà un parking assigné."));
                     return;
                 }
                 
+                // Extract allocated spot
+                String allocatedSpot = response.getOrDefault("spot_id", "inconnu").toString();
+                String spotType = response.getOrDefault("spot_type", "").toString();
+                boolean overflow = Boolean.TRUE.equals(response.get("overflow_to_military"));
+                
                 javafx.application.Platform.runLater(() -> {
-                    // Build detailed message
-                    StringBuilder message = new StringBuilder("Vol " + icao24 + " assigné au poste " + spotCode);
-                    if (!apiSpotCode.equals(spotCode)) {
-                        message.append(" (API: ").append(apiSpotCode).append(")");
+                    // Build success message
+                    StringBuilder message = new StringBuilder("✅ Vol " + icao24 + " assigné automatiquement au poste " + allocatedSpot);
+                    if (!spotType.isEmpty()) {
+                        message.append(" (").append(spotType).append(")");
+                    }
+                    if (overflow) {
+                        message.append("\n⚠️ Débordement vers zone militaire");
+                    }
+                    if (response.containsKey("reason")) {
+                        message.append("\n\nRaison: ").append(response.get("reason"));
                     }
                     if (response != null) {
                         if (response.containsKey("message")) {
@@ -309,7 +335,7 @@ public class PostesController {
                 // Log each API spot for debugging
                 for (com.aige.apronsmart.models.ParkingSpot spot : apiSpots) {
                     logger.info("API Spot - ID: {}, spotNumber: '{}', code: '{}', status: {}, type: {}", 
-                        spot.getId(), spot.getSpotNumber(), spot.getCode(), spot.getStatus(), spot.getType());
+                        spot.getSpotId(), spot.getSpotNumber(), spot.getCode(), spot.getStatus(), spot.getType());
                 }
                 
                 com.aige.apronsmart.models.ParkingAvailability availability = parkingService.getAvailability();
@@ -354,10 +380,11 @@ public class PostesController {
                 Map<String, com.aige.apronsmart.models.ParkingSpot> apiSpotMap = new java.util.HashMap<>();
                 for (com.aige.apronsmart.models.ParkingSpot spot : apiSpots) {
                     if (spot.getSpotNumber() != null) {
-                        // Map by API number
-                        apiSpotMap.put(spot.getSpotNumber(), spot);
+                        // Map by API number (convert Integer to String)
+                        String spotNumStr = String.valueOf(spot.getSpotNumber());
+                        apiSpotMap.put(spotNumStr, spot);
                         // Also map by our hardcoded code if mapping exists
-                        String ourCode = apiNumberToCode.get(spot.getSpotNumber());
+                        String ourCode = apiNumberToCode.get(spotNumStr);
                         if (ourCode != null) {
                             apiSpotMap.put(ourCode, spot);
                             logger.debug("Mapped API spot {} to our code {}", spot.getSpotNumber(), ourCode);
@@ -407,8 +434,9 @@ public class PostesController {
                     com.aige.apronsmart.models.ParkingSpot spot = apiSpotMap.get(spotNumber);
                     com.aige.apronsmart.models.ParkingAllocation allocation = allocationMap.get(spotNumber);
                     
-                    if (spot != null && spot.getId() != null) {
-                        poste.setId((long) spot.getId());
+                    if (spot != null && spot.getSpotId() != null) {
+                        // Use spotId hash for internal ID (API doesn't provide numeric ID)
+                        poste.setId((long) spot.getSpotId().hashCode());
                     }
                     
                     // Determine status: allocation takes priority, then spot status
@@ -454,10 +482,10 @@ public class PostesController {
                         statusSet = true;
                     }
                     
-                    // If API didn't return this spot at all, mark as LIBRE (available by default)
+                    // If API didn't return this spot at all, mark as OCCUPE
                     if (!statusSet) {
-                        poste.setStatus(Poste.PosteStatus.LIBRE);
-                        logger.debug("Spot {} not in API, marking as LIBRE (default)", spotNumber);
+                        poste.setStatus(Poste.PosteStatus.OCCUPE);
+                        logger.debug("Spot {} not in API, marking as OCCUPE (occupied by default)", spotNumber);
                     }
                     
                     postes.add(poste);
@@ -477,9 +505,10 @@ public class PostesController {
                     long occupe = postes.stream().filter(p -> p.getStatus() == Poste.PosteStatus.OCCUPE).count();
                     long maintenance = postes.stream().filter(p -> p.getStatus() == Poste.PosteStatus.MAINTENANCE).count();
                     long reserve = postes.stream().filter(p -> p.getStatus() == Poste.PosteStatus.RESERVE).count();
+                    long indisponible = postes.stream().filter(p -> p.getStatus() == Poste.PosteStatus.INDISPONIBLE).count();
                     
-                    logger.info("Parking stats - Total: {}, Libre: {}, Occupé: {}, Maintenance: {}, Réservé: {}", 
-                               total, libre, occupe, maintenance, reserve);
+                    logger.info("Parking stats - Total: {}, Libre: {}, Occupé: {}, Maintenance: {}, Réservé: {}, Indisponible: {}", 
+                               total, libre, occupe, maintenance, reserve, indisponible);
                     
                     // Update UI with real counts
                     if (totalPostesLabel != null) totalPostesLabel.setText(String.valueOf(total));
